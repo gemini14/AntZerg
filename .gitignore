@@ -5,3 +5,32 @@
 #VS files
 [Dd]ebug*/
 [Rr]elease*/
+*.[Oo]bj
+*.dll
+*.exe
+*.pdb
+*.user
+*.aps
+*.pch
+*.vspscc
+*.vssscc
+*.vcxproj.user
+*_i.c
+*_p.c
+*.ncb
+*.suo
+*.tlb
+*.bak
+*.[Cc]ache
+*.ilk
+*.log
+*.lib
+*.sbr
+*.sdf
+*.opensdf
+ipch/
+obj/[Bb]in
+[Dd]ebug*/
+[Rr]elease*/
+
+#Proj specific
