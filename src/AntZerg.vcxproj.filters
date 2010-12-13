@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\Ants">
+      <UniqueIdentifier>{dcb3fa78-efe9-45db-8f81-db8cbc3039e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Ants">
+      <UniqueIdentifier>{ee70990d-049e-466d-987f-254f70254425}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AppManager.cpp">
@@ -21,13 +27,22 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Ants\Ant.cpp">
+      <Filter>Source Files\Ants</Filter>
+    </ClCompile>
+    <ClCompile Include="Ants\AntBaby.cpp">
+      <Filter>Source Files\Ants</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Ant.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="AppManager.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Ants\Ant.h">
+      <Filter>Header Files\Ants</Filter>
+    </ClInclude>
+    <ClInclude Include="Ants\AntBaby.h">
+      <Filter>Header Files\Ants</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

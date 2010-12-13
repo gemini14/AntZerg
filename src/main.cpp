@@ -1,9 +1,8 @@
-//============================================================================
-// Name        : AntZerg
-// Author      : Tarik Sturm-Dahal
+/* Name: AntZerg
+   Author: Tarik Sturm-Dahal
 
-// Copyright   : Copyright (c) <year> <copyright holders>
-/* Permission is hereby granted, free of charge, to any person obtaining a copy
+ Copyright: Copyright (c) <2010> <Tarik Sturm-Dahal>
+ Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
@@ -19,30 +18,26 @@
  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- THE SOFTWARE. */
+ THE SOFTWARE.
 
-// Description : AntZerg is a small C++/Lua simulation using swarm intelligence & behavior trees to model
-// 				 an ant colony.
-//============================================================================
-
-#include <memory>
+ Description: AntZerg is a small C++/Lua simulation using swarm intelligence & behavior trees to model
+ an ant colony.
+*/
 
 #include <irrlicht.h>
 
 #include "AppManager.h"
 
+
 using namespace AntZerg;
 using namespace irr;
 using namespace std;
 
+
 int main()
 {
-	auto test = []{int i = 5;};
-	test();
-	AppManager *app = new AppManager;
-
-	app->guienv->addStaticText(L"Hello world!", core::rect<s32>(10, 10, 260, 22), true);
-
+	AppManager *app = new AppManager(800, 800);
+	
 	while (app->device->run())
 	{
 		if (app->device->isWindowActive())
