@@ -19,6 +19,15 @@
     <Filter Include="Source Files\Ants">
       <UniqueIdentifier>{ee70990d-049e-466d-987f-254f70254425}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Scripts">
+      <UniqueIdentifier>{34d425c4-c09d-4708-8868-147f6d34c825}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Scripts\conf">
+      <UniqueIdentifier>{779a03d8-bbcb-4d34-b40c-f347fe8e9e5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Scripts\actions">
+      <UniqueIdentifier>{3a537afa-0bb9-4c28-8a31-e492171e04a8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AppManager.cpp">
@@ -56,5 +65,19 @@
     <ClInclude Include="Ants\AntQueen.h">
       <Filter>Header Files\Ants</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="scripts\conf\larva.lua">
+      <Filter>Source Files\Scripts\conf</Filter>
+    </None>
+    <None Include="scripts\conf\queen.lua">
+      <Filter>Source Files\Scripts\conf</Filter>
+    </None>
+    <None Include="scripts\actions\larva.lua">
+      <Filter>Source Files\Scripts\actions</Filter>
+    </None>
+    <None Include="scripts\actions\queen.lua">
+      <Filter>Source Files\Scripts\actions</Filter>
+    </None>
   </ItemGroup>
 </Project>

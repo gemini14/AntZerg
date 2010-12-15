@@ -78,6 +78,12 @@
     <ClInclude Include="Ants\AntQueen.h" />
     <ClInclude Include="AppManager.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="scripts\actions\larva.lua" />
+    <None Include="scripts\actions\queen.lua" />
+    <None Include="scripts\conf\larva.lua" />
+    <None Include="scripts\conf\queen.lua" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
