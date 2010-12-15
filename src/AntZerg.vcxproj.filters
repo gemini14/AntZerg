@@ -36,7 +36,7 @@
     <ClCompile Include="Ants\AntLarva.cpp">
       <Filter>Source Files\Ants</Filter>
     </ClCompile>
-    <ClCompile Include="Ants\StationaryAnt.cpp">
+    <ClCompile Include="Ants\AntQueen.cpp">
       <Filter>Source Files\Ants</Filter>
     </ClCompile>
   </ItemGroup>
@@ -53,7 +53,7 @@
     <ClInclude Include="Ants\AntLarva.h">
       <Filter>Header Files\Ants</Filter>
     </ClInclude>
-    <ClInclude Include="Ants\StationaryAnt.h">
+    <ClInclude Include="Ants\AntQueen.h">
       <Filter>Header Files\Ants</Filter>
     </ClInclude>
   </ItemGroup>

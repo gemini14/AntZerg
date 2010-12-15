@@ -5,6 +5,7 @@
 
 #include "Ant.h"
 #include "AntLarva.h"
+#include "AntQueen.h"
 
 
 namespace AntZerg
@@ -29,6 +30,7 @@ namespace AntZerg
 
 		if(antType == "queen")
 		{
+			temp = new AntQueen(++ID_counter, "scripts/conf/queen.lua", "scripts/actions/queen.lua", x, y);
 		}
 		else if(antType == "larva")
 		{

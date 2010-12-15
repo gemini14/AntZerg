@@ -13,9 +13,7 @@ namespace AntZerg
 	AntLarva::~AntLarva()
 	{
 	}
-
 	
-
 	void AntLarva::Eat()
 	{
 		DecreaseFoodStock();
@@ -28,5 +26,6 @@ namespace AntZerg
 
 	void AntLarva::Run()
 	{
+		// TODO: implement larva run
 	}
 }
