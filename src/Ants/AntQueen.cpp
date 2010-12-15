@@ -22,6 +22,24 @@ namespace AntZerg
 				numLarvaeAvailable++;
 			}
 		}
+
+		void AntQueen::ExtractLarvae()
+		{
+			if(numLarvaeAvailable)
+			{
+				numLarvaeAvailable--;
+			}
+		}
+
+		int AntQueen::GetMaxLarvaeProduced() const
+		{
+			return numLarvaeProduced;
+		}
+
+		int AntQueen::GetNumAvailLarvae() const
+		{
+			return numLarvaeAvailable;
+		}
 		
 		void AntQueen::Run()
 		{

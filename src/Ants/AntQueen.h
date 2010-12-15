@@ -21,6 +21,9 @@ namespace AntZerg
 		virtual ~AntQueen();
 
 		virtual void Eat();
+		void ExtractLarvae();
+		int GetMaxLarvaeProduced() const;
+		int GetNumAvailLarvae() const;
 		
 		virtual void Run();
 	};

@@ -21,7 +21,7 @@ namespace AntZerg
 
 	void Ant::DecreaseFoodStock()
 	{
-		if(food > 0)
+		if(food)
 		{
 			food--;
 		}
@@ -64,7 +64,7 @@ namespace AntZerg
 
 	void Ant::SetScalingFactor(const float scale)
 	{
-		if(scale > 0)
+		if(scale)
 		{
 			displayScalingFactor = scale;
 		}
