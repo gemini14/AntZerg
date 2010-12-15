@@ -14,6 +14,8 @@ namespace AntZerg
 	{
 	private:
 
+		bool movementEnabled;
+
 		// this could be changed to another vector implementation later if needed
 		irr::core::vector2df position;	
 		
@@ -22,19 +24,28 @@ namespace AntZerg
 		std::string configFile;
 		std::string actionScript;
 
+		int food;
+		
 		int ID;
 
 	public:
 
-		Ant(const std::string& configFile, const std::string& actionScriptFile, const float x, const float y);
+		Ant(const int ID, bool canMove, const std::string& configFile, 
+			const std::string& actionScriptFile, const float x, const float y);
 		virtual ~Ant();
 
+		bool CanMove() const;
+		void DecreaseFoodStock();
+		virtual void Eat() = 0;
 		float GetDispScaling() const;
+		int GetFood() const;
 		int GetID() const;
 		irr::core::vector2df GetPosition() const;
 		float GetX() const;
 		float GetY() const;
+		void IncreaseFoodStock();
 		void SetScalingFactor(const float scale);
+				
 
 		virtual void Run() = 0;
 	};

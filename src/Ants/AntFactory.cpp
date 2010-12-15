@@ -26,12 +26,13 @@ namespace AntZerg
 	Ant* AntFactory::CreateAnt(const std::string& antType, const float x, const float y)
 	{
 		Ant *temp = nullptr;
+
 		if(antType == "queen")
 		{
 		}
 		else if(antType == "larva")
 		{
-			temp = new AntLarva("scripts/conf/larva.lua", "scripts/actions/larva.lua", x, y);
+			temp = new AntLarva(++ID_counter, "scripts/conf/larva.lua", "scripts/actions/larva.lua", x, y);
 		}
 		else if(antType == "worker")
 		{
@@ -49,7 +50,7 @@ namespace AntZerg
 
 		if(temp)
 		{
-			antLookupTable[++ID_counter] = temp;
+			antLookupTable[ID_counter] = temp;
 			numAntsAlive++;
 			maxAntsAlive++;
 		}

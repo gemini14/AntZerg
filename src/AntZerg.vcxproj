@@ -67,6 +67,7 @@
     <ClCompile Include="Ants\Ant.cpp" />
     <ClCompile Include="Ants\AntLarva.cpp" />
     <ClCompile Include="Ants\AntFactory.cpp" />
+    <ClCompile Include="Ants\StationaryAnt.cpp" />
     <ClCompile Include="AppManager.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -74,6 +75,7 @@
     <ClInclude Include="Ants\Ant.h" />
     <ClInclude Include="Ants\AntLarva.h" />
     <ClInclude Include="Ants\AntFactory.h" />
+    <ClInclude Include="Ants\StationaryAnt.h" />
     <ClInclude Include="AppManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

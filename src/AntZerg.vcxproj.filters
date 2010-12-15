@@ -36,6 +36,9 @@
     <ClCompile Include="Ants\AntLarva.cpp">
       <Filter>Source Files\Ants</Filter>
     </ClCompile>
+    <ClCompile Include="Ants\StationaryAnt.cpp">
+      <Filter>Source Files\Ants</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppManager.h">
@@ -48,6 +51,9 @@
       <Filter>Header Files\Ants</Filter>
     </ClInclude>
     <ClInclude Include="Ants\AntLarva.h">
+      <Filter>Header Files\Ants</Filter>
+    </ClInclude>
+    <ClInclude Include="Ants\StationaryAnt.h">
       <Filter>Header Files\Ants</Filter>
     </ClInclude>
   </ItemGroup>
