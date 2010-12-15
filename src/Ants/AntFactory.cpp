@@ -1,0 +1,79 @@
+#include "AntFactory.h"
+
+
+#include <unordered_map>
+
+#include "Ant.h"
+#include "AntLarva.h"
+
+
+namespace AntZerg
+{
+	typedef std::unordered_map<int, Ant*> AntHash;
+	AntHash antLookupTable;
+
+	int ID_counter = 0;
+	int numAntsAlive = 0;
+	int numAntsDead = 0;
+	int maxAntsAlive = 0;
+
+
+	bool AntFactory::IsIDPresent(const int ID)
+	{
+		return antLookupTable.find(ID) != antLookupTable.end();
+	}
+
+	Ant* AntFactory::CreateAnt(const std::string& antType, const float x, const float y)
+	{
+		Ant *temp = nullptr;
+		if(antType == "queen")
+		{
+		}
+		else if(antType == "larva")
+		{
+			temp = new AntLarva("scripts/conf/larva.lua", "scripts/actions/larva.lua", x, y);
+		}
+		else if(antType == "worker")
+		{
+		}
+		else if(antType == "nurse")
+		{
+		}
+		else if(antType == "warrior")
+		{
+		}
+		else
+		{
+			temp = nullptr;
+		}
+
+		if(temp)
+		{
+			antLookupTable[++ID_counter] = temp;
+			numAntsAlive++;
+			maxAntsAlive++;
+		}
+		return temp;
+	}
+
+	Ant* AntFactory::GetAntByID(const int ID)
+	{
+		// this check is done to ensure that we won't end up inserting a new value if the ID doesn't exist
+		if(IsIDPresent(ID))
+		{
+			return antLookupTable[ID];
+		}
+
+		return nullptr;
+	}
+
+	void AntFactory::RemoveAntByID(const int ID)
+	{
+		if(IsIDPresent(ID))
+		{
+			antLookupTable.erase(ID);
+			numAntsDead++;
+			numAntsAlive--;
+		}
+	}
+}

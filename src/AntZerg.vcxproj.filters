@@ -30,7 +30,10 @@
     <ClCompile Include="Ants\Ant.cpp">
       <Filter>Source Files\Ants</Filter>
     </ClCompile>
-    <ClCompile Include="Ants\AntBaby.cpp">
+    <ClCompile Include="Ants\AntFactory.cpp">
+      <Filter>Source Files\Ants</Filter>
+    </ClCompile>
+    <ClCompile Include="Ants\AntLarva.cpp">
       <Filter>Source Files\Ants</Filter>
     </ClCompile>
   </ItemGroup>
@@ -41,7 +44,10 @@
     <ClInclude Include="Ants\Ant.h">
       <Filter>Header Files\Ants</Filter>
     </ClInclude>
-    <ClInclude Include="Ants\AntBaby.h">
+    <ClInclude Include="Ants\AntFactory.h">
+      <Filter>Header Files\Ants</Filter>
+    </ClInclude>
+    <ClInclude Include="Ants\AntLarva.h">
       <Filter>Header Files\Ants</Filter>
     </ClInclude>
   </ItemGroup>

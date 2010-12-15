@@ -22,15 +22,20 @@ namespace AntZerg
 		std::string configFile;
 		std::string actionScript;
 
+		int ID;
+
 	public:
 
-		Ant(const std::string& configFile, const std::string& actionScriptFile, const float scalingFactor, 
-			const float x, const float y);
+		Ant(const std::string& configFile, const std::string& actionScriptFile, const float x, const float y);
 		virtual ~Ant();
 
 		float GetDispScaling() const;
+		int GetID() const;
 		irr::core::vector2df GetPosition() const;
-		
+		float GetX() const;
+		float GetY() const;
+		void SetScalingFactor(const float scale);
+
 		virtual void Run() = 0;
 	};
 }
