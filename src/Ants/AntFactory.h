@@ -17,7 +17,7 @@ namespace AntZerg
 
 	public:
 
-		static Ant* AntFactory::CreateAnt(const std::string& antType, const float x, const float y);
+		static Ant* CreateAnt(const std::string& antType, const float x, const float y);
 		static Ant* GetAntByID(const int ID);
 		static void RemoveAntByID(const int ID);
 	};

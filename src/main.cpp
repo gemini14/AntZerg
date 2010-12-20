@@ -37,7 +37,7 @@ using namespace std;
 int main()
 {
 	AppManager *app = new AppManager(800, 800);
-	
+
 	while (app->device->run())
 	{
 		if (app->device->isWindowActive())
