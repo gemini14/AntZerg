@@ -44,7 +44,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Irrlicht.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Irrlicht.lib;lua5.1.lib;luabind-0.9.1_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
     </Link>
@@ -60,7 +60,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>Irrlicht.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Irrlicht.lib;lua5.1.lib;luabind-0.9.1.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -69,6 +69,7 @@
     <ClCompile Include="Ants\AntFactory.cpp" />
     <ClCompile Include="Ants\AntQueen.cpp" />
     <ClCompile Include="AppManager.cpp" />
+    <ClCompile Include="Lua\LuaManager.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -77,6 +78,7 @@
     <ClInclude Include="Ants\AntFactory.h" />
     <ClInclude Include="Ants\AntQueen.h" />
     <ClInclude Include="AppManager.h" />
+    <ClInclude Include="Lua\LuaManager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="scripts\actions\larva.lua" />

@@ -24,7 +24,7 @@ namespace AntZerg
 		return antLookupTable.find(ID) != antLookupTable.end();
 	}
 
-	Ant* AntFactory::CreateAnt(const std::string& antType, const float x, const float y)
+	int AntFactory::CreateAnt(const std::string& antType, const float x, const float y)
 	{
 		Ant *temp = nullptr;
 
@@ -56,7 +56,7 @@ namespace AntZerg
 			numAntsAlive++;
 			maxAntsAlive++;
 		}
-		return temp;
+		return temp ? ID_counter : -1;
 	}
 
 	Ant* AntFactory::GetAntByID(const int ID)

@@ -3,6 +3,8 @@
 
 namespace AntZerg
 {
+	static void Register(lua_State *luaState);
+
 	Ant::Ant(const int ID, bool canMove, const std::string& configFile, const std::string& actionScriptFile, 
 		const float x, const float y)
 		: movementEnabled(canMove), position(x, y), displayScalingFactor(1), configFile(configFile), 
@@ -36,7 +38,7 @@ namespace AntZerg
 	{
 		return food;
 	}
-	
+
 	int Ant::GetID() const
 	{
 		return ID;
@@ -62,11 +64,33 @@ namespace AntZerg
 		food++;
 	}
 
+	void Ant::RegisterLua(lua_State *luaState)
+	{
+		Register(luaState);
+	}
+
 	void Ant::SetScalingFactor(const float scale)
 	{
 		if(scale)
 		{
 			displayScalingFactor = scale;
 		}
+	}
+
+	
+	void Register(lua_State *luaState)
+	{
+		using namespace luabind;
+
+		module(luaState, "AntZerg")
+			[
+				class_<Ant>("Ant")
+				.def("CanMove", &Ant::CanMove)
+				.def("Eat", &Ant::Eat)
+				.def("GetFood", &Ant::GetFood)
+				.def("GetID", &Ant::GetID)
+				.def("GetX", &Ant::GetX)
+				.def("GetY", &Ant::GetY)
+			];
 	}
 }

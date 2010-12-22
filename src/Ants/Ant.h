@@ -4,8 +4,13 @@
 
 #include <string>
 
-#include <irrlicht.h>
 #include <boost/noncopyable.hpp>
+#include <irrlicht.h>
+extern "C"
+{
+#include <lua.h>
+}
+#include <luabind/luabind.hpp>
 
 
 namespace AntZerg
@@ -44,8 +49,8 @@ namespace AntZerg
 		float GetX() const;
 		float GetY() const;
 		void IncreaseFoodStock();
+		virtual void RegisterLua(lua_State* luaState) = 0;
 		void SetScalingFactor(const float scale);
-				
 
 		virtual void Run() = 0;
 	};

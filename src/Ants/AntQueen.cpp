@@ -3,46 +3,67 @@
 
 namespace AntZerg
 {
-		AntQueen::AntQueen(const int ID, const std::string& configFile, const std::string& actionScriptFile,
-			const float x, const float y)
-			: Ant(ID, false, configFile, actionScriptFile, x, y), numLarvaeProduced(0)
-		{
-		}
-		
-		AntQueen::~AntQueen()
-		{
-		}
+	static void Register(lua_State *luaState);
 
-		void AntQueen::Eat()
-		{
-			if(GetFood() > 0)
-			{
-				DecreaseFoodStock();
-				numLarvaeProduced++;
-				numLarvaeAvailable++;
-			}
-		}
+	AntQueen::AntQueen(const int ID, const std::string& configFile, const std::string& actionScriptFile,
+		const float x, const float y)
+		: Ant(ID, false, configFile, actionScriptFile, x, y), numLarvaeProduced(0)
+	{
+	}
 
-		void AntQueen::ExtractLarvae()
-		{
-			if(numLarvaeAvailable)
-			{
-				numLarvaeAvailable--;
-			}
-		}
+	AntQueen::~AntQueen()
+	{
+	}
 
-		int AntQueen::GetMaxLarvaeProduced() const
+	void AntQueen::Eat()
+	{
+		if(GetFood() > 0)
 		{
-			return numLarvaeProduced;
+			DecreaseFoodStock();
+			numLarvaeProduced++;
+			numLarvaeAvailable++;
 		}
+	}
 
-		int AntQueen::GetNumAvailLarvae() const
+	void AntQueen::ExtractLarvae()
+	{
+		if(numLarvaeAvailable)
 		{
-			return numLarvaeAvailable;
+			numLarvaeAvailable--;
 		}
-		
-		void AntQueen::Run()
-		{
-			// TODO: implement run for queen
-		}
+	}
+
+	int AntQueen::GetMaxLarvaeProduced() const
+	{
+		return numLarvaeProduced;
+	}
+
+	int AntQueen::GetNumAvailLarvae() const
+	{
+		return numLarvaeAvailable;
+	}
+
+	void AntQueen::RegisterLua(lua_State* luaState)
+	{
+		Register(luaState);
+	}
+
+	void AntQueen::Run()
+	{
+		// TODO: implement run for queen
+	}
+
+	void Register(lua_State *luaState)
+	{
+		using namespace luabind;
+
+		module(luaState, "AntZerg")
+			[
+				class_<AntQueen, Ant>("AntQueen")
+				.def("Eat", &AntQueen::Eat)
+				.def("ExtractLarvae", &AntQueen::ExtractLarvae)
+				.def("GetMaxLarvaeProduced", &AntQueen::GetMaxLarvaeProduced)
+				.def("GetNumAvailableLarvae", &AntQueen::GetNumAvailLarvae)
+			];
+	}
 }

@@ -28,6 +28,12 @@
     <Filter Include="Source Files\Scripts\actions">
       <UniqueIdentifier>{3a537afa-0bb9-4c28-8a31-e492171e04a8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Lua">
+      <UniqueIdentifier>{cfa294ab-2e4e-45c2-8a5f-7e42d7fcdeb3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Lua">
+      <UniqueIdentifier>{7de0eff2-1230-4dca-b608-44f79856d6dd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AppManager.cpp">
@@ -48,6 +54,9 @@
     <ClCompile Include="Ants\AntQueen.cpp">
       <Filter>Source Files\Ants</Filter>
     </ClCompile>
+    <ClCompile Include="Lua\LuaManager.cpp">
+      <Filter>Source Files\Lua</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppManager.h">
@@ -64,6 +73,9 @@
     </ClInclude>
     <ClInclude Include="Ants\AntQueen.h">
       <Filter>Header Files\Ants</Filter>
+    </ClInclude>
+    <ClInclude Include="Lua\LuaManager.h">
+      <Filter>Header Files\Lua</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
