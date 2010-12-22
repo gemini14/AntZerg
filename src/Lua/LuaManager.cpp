@@ -14,4 +14,8 @@ namespace AntZerg
 		lua_close(luaState);
 	}
 
+	lua_State* const LuaManager::GetLuaState()
+	{
+		return luaState;
+	}
 }

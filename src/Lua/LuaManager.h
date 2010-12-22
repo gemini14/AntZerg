@@ -24,6 +24,8 @@ namespace AntZerg
 		LuaManager();
 		~LuaManager();
 
+		lua_State* const GetLuaState();
+
 	};
 
 }
