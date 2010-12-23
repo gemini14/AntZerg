@@ -1,17 +1,20 @@
 #include "AntFactory.h"
 
 
+#include <memory>
 #include <unordered_map>
 
 #include "Ant.h"
 #include "AntLarva.h"
 #include "AntQueen.h"
+#include "../Lua/LuaManager.h"
 
 
 namespace AntZerg
 {
 	typedef std::unordered_map<int, Ant*> AntHash;
 	AntHash antLookupTable;
+	std::shared_ptr<LuaManager> lua(new LuaManager);
 
 	int ID_counter = 0;
 	int numAntsAlive = 0;
@@ -30,11 +33,11 @@ namespace AntZerg
 
 		if(antType == "queen")
 		{
-			temp = new AntQueen(++ID_counter, "scripts/conf/queen.lua", "scripts/actions/queen.lua", x, y);
+			temp = new AntQueen(++ID_counter, lua, "scripts/conf/queen.lua", "scripts/actions/queen.lua", x, y);
 		}
 		else if(antType == "larva")
 		{
-			temp = new AntLarva(++ID_counter, "scripts/conf/larva.lua", "scripts/actions/larva.lua", x, y);
+			temp = new AntLarva(++ID_counter, lua, "scripts/conf/larva.lua", "scripts/actions/larva.lua", x, y);
 		}
 		else if(antType == "worker")
 		{
@@ -68,6 +71,13 @@ namespace AntZerg
 		}
 
 		return nullptr;
+	}
+
+	void AntFactory::GlueObjects()
+	{
+		Ant::RegisterLua(lua->GetLuaState());
+		AntLarva::RegisterLua(lua->GetLuaState());
+		AntQueen::RegisterLua(lua->GetLuaState());
 	}
 
 	void AntFactory::RemoveAntByID(const int ID)

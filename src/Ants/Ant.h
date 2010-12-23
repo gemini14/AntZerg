@@ -2,15 +2,13 @@
 #define ANT_H
 
 
+#include <memory>
 #include <string>
 
 #include <boost/noncopyable.hpp>
 #include <irrlicht.h>
-extern "C"
-{
-#include <lua.h>
-}
-#include <luabind/luabind.hpp>
+
+#include "../Lua/LuaManager.h"
 
 
 namespace AntZerg
@@ -33,9 +31,13 @@ namespace AntZerg
 		
 		int ID;
 
+	protected:
+
+		std::shared_ptr<LuaManager> lua;
+
 	public:
 
-		Ant(const int ID, bool canMove, const std::string& configFile, 
+		Ant(const int ID, bool canMove, std::shared_ptr<LuaManager> lua, const std::string& configFile, 
 			const std::string& actionScriptFile, const float x, const float y);
 		virtual ~Ant();
 
@@ -49,7 +51,7 @@ namespace AntZerg
 		float GetX() const;
 		float GetY() const;
 		void IncreaseFoodStock();
-		virtual void RegisterLua(lua_State* luaState) = 0;
+		static void RegisterLua(lua_State* luaState);
 		void SetScalingFactor(const float scale);
 
 		virtual void Run() = 0;

@@ -5,9 +5,9 @@ namespace AntZerg
 {
 	static void Register(lua_State *luaState);
 
-	AntQueen::AntQueen(const int ID, const std::string& configFile, const std::string& actionScriptFile,
-		const float x, const float y)
-		: Ant(ID, false, configFile, actionScriptFile, x, y), numLarvaeProduced(0)
+	AntQueen::AntQueen(const int ID, std::shared_ptr<LuaManager> lua, const std::string& configFile, 
+		const std::string& actionScriptFile, const float x, const float y)
+		: Ant(ID, false, lua, configFile, actionScriptFile, x, y), numLarvaeProduced(0)
 	{
 	}
 

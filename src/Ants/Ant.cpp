@@ -5,9 +5,9 @@ namespace AntZerg
 {
 	static void Register(lua_State *luaState);
 
-	Ant::Ant(const int ID, bool canMove, const std::string& configFile, const std::string& actionScriptFile, 
-		const float x, const float y)
-		: movementEnabled(canMove), position(x, y), displayScalingFactor(1), configFile(configFile), 
+	Ant::Ant(const int ID, bool canMove, std::shared_ptr<LuaManager> lua, const std::string& configFile, 
+		const std::string& actionScriptFile, const float x, const float y)
+		: movementEnabled(canMove), lua(lua), position(x, y), displayScalingFactor(1), configFile(configFile), 
 		actionScript(actionScriptFile), food(0), ID(ID)
 	{
 	}

@@ -5,9 +5,9 @@ namespace AntZerg
 {
 	static void Register(lua_State *luaState);
 
-	AntLarva::AntLarva(const int ID, const std::string& configFile, const std::string& actionScriptFile, 
+	AntLarva::AntLarva(const int ID, std::shared_ptr<LuaManager> lua, const std::string& configFile, const std::string& actionScriptFile, 
 		const float x, const float y)
-		: Ant(ID, false, configFile, actionScriptFile, x, y), numTimesFoodEaten(0), maxFoodBeforeMorph(1),
+		: Ant(ID, false, lua, configFile, actionScriptFile, x, y), numTimesFoodEaten(0), maxFoodBeforeMorph(1),
 		morph(false)
 	{
 	}

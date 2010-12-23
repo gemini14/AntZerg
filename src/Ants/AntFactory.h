@@ -19,6 +19,7 @@ namespace AntZerg
 
 		static int CreateAnt(const std::string& antType, const float x, const float y);
 		static Ant* GetAntByID(const int ID);
+		static void GlueObjects();
 		static void RemoveAntByID(const int ID);
 	};
 
