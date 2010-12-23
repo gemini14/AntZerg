@@ -10,6 +10,8 @@ namespace AntZerg
 		: movementEnabled(canMove), lua(lua), position(x, y), displayScalingFactor(1), configFile(configFile), 
 		actionScript(actionScriptFile), food(0), ID(ID)
 	{
+		lua->LoadScript(configFile);
+		lua->LoadScript(actionScriptFile);
 	}
 
 	Ant::~Ant()

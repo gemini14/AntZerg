@@ -1,3 +1,3 @@
 --Larva configuration script
 
-local scale = 0.5
+LarvaConf = {scale = 0.5}

@@ -1,3 +1,3 @@
 --Queen configuration script
 
-local scale = 10
+QueenConf = {scale = 10}

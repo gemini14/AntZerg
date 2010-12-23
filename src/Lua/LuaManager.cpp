@@ -11,6 +11,7 @@ namespace AntZerg
 	{
 		luaState = lua_open();
 		luabind::open(luaState);
+		luaL_openlibs(luaState);
 	}
 
 	LuaManager::~LuaManager()
@@ -28,7 +29,7 @@ namespace AntZerg
 		using namespace luabind;
 
 		int result = luaL_dofile(luaState, filename.c_str());
-		if(!result)
+		if(result)
 		{
 #ifdef _DEBUG
 			std::cout << "Error loading lua script.  Error code: " << result << std::endl;

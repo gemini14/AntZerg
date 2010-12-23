@@ -1,6 +1,6 @@
 #include "AntQueen.h"
 
-
+#include <iostream>
 namespace AntZerg
 {
 	static void Register(lua_State *luaState);
@@ -9,6 +9,11 @@ namespace AntZerg
 		const std::string& actionScriptFile, const float x, const float y)
 		: Ant(ID, false, lua, configFile, actionScriptFile, x, y), numLarvaeProduced(0)
 	{
+		using namespace luabind;
+
+		auto confTable = lua->GetObject("QueenConf");
+		assert(confTable.is_valid() && type(confTable) == LUA_TTABLE);
+		SetScalingFactor(object_cast<float>(confTable["scale"]));
 	}
 
 	AntQueen::~AntQueen()
@@ -50,7 +55,7 @@ namespace AntZerg
 
 	void AntQueen::Run()
 	{
-		// TODO: implement run for queen
+		lua->GetObject("QueenRun")(GetID());
 	}
 
 	void Register(lua_State *luaState)
