@@ -35,6 +35,7 @@ namespace AntZerg
 		int CreateAnt(const std::string& antType, const float x, const float y);
 		Ant* GetAntByID(const int ID);
 		void RemoveAntByID(const int ID);
+		void RenderUpdateAll();
 		void RunAll();
 	};
 

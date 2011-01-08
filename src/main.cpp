@@ -30,6 +30,7 @@
 
 #include "AppManager.h"
 #include "Ants/AntFactory.h"
+#include "Renderer/Renderer.h"
 
 using namespace AntZerg;
 using namespace irr;
@@ -38,18 +39,24 @@ using namespace std;
 
 int main()
 {
-	AppManager *app = new AppManager(800, 800);
+	std::shared_ptr<AppManager> app((new AppManager(800, 800)));
 
 	std::unique_ptr<AntFactory> factory(new AntFactory);
+	std::unique_ptr<Renderer> renderer((new Renderer(app)));
+
 	int q = factory->CreateAnt("queen", 0.f, 0.f);
-	factory->RunAll();
-	
+		
 	while (app->device->run())
 	{
 		if (app->device->isWindowActive())
 		{
+			factory->RunAll();
+			factory->RenderUpdateAll();
+
 			app->driver->beginScene(true, true, video::SColor(255, 100, 101, 140));
 
+			renderer->DrawAll();
+			
 			app->smgr->drawAll();
 			app->guienv->drawAll();
 
@@ -61,6 +68,5 @@ int main()
 		}
 	}
 
-	delete app;
 	return 0;
 }

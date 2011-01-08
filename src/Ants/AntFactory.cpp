@@ -96,6 +96,10 @@ namespace AntZerg
 		}
 	}
 
+	void AntFactory::RenderUpdateAll()
+	{
+	}
+
 	void AntFactory::RunAll()
 	{
 		for(auto iter = antLookupTable.begin(); iter != antLookupTable.end(); ++iter)
