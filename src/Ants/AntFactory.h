@@ -2,25 +2,40 @@
 #define ANTFACTORY_H
 
 
-#include <string>
-
 #include <boost/noncopyable.hpp>
+#include <memory>
+#include <string>
+#include <unordered_map>
+
+#include "../Lua/LuaManager.h"
 
 
 namespace AntZerg
 {
 	class Ant;
 
-	class AntFactory
+	class AntFactory : boost::noncopyable
 	{
-		static bool IsIDPresent(const int ID);
+		typedef std::unordered_map<int, Ant*> AntHash;
+		AntHash antLookupTable;
+		std::shared_ptr<LuaManager> lua;
+
+		int ID_counter;
+		int numAntsAlive;
+		int numAntsDead;
+		int maxAntsAlive;
+
+		bool IsIDPresent(const int ID);
 
 	public:
 
-		static int CreateAnt(const std::string& antType, const float x, const float y);
-		static Ant* GetAntByID(const int ID);
-		static void GlueObjects();
-		static void RemoveAntByID(const int ID);
+		AntFactory();
+		~AntFactory();
+
+		int CreateAnt(const std::string& antType, const float x, const float y);
+		Ant* GetAntByID(const int ID);
+		void RemoveAntByID(const int ID);
+		void RunAll();
 	};
 
 }

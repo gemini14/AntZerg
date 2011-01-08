@@ -19,9 +19,20 @@ namespace AntZerg
 		lua_close(luaState);
 	}
 
+	void LuaManager::CallFunction(const std::string& functionName, int ID)
+	{
+		luabind::call_function<void>(luaState, functionName.c_str(), ID);
+	}
+
 	lua_State* const LuaManager::GetLuaState() const
 	{
 		return luaState;
+	}
+
+	luabind::object LuaManager::GetObject(const std::string& objName)
+	{
+		// must check if valid in caller
+		return luabind::globals(luaState)[objName.c_str()];
 	}
 
 	bool LuaManager::LoadScript(const std::string& filename)
@@ -36,14 +47,8 @@ namespace AntZerg
 #endif
 			return false;
 		}
-		
-		return true;
-	}
 
-	luabind::object LuaManager::GetObject(const std::string& objName)
-	{
-		// must check if valid in caller
-		return luabind::globals(luaState)[objName.c_str()];
+		return true;
 	}
 
 }

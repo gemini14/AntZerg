@@ -1,30 +1,43 @@
 #include "AntFactory.h"
 
 
-#include <memory>
-#include <unordered_map>
+#include <boost/foreach.hpp>
 
 #include "Ant.h"
 #include "AntLarva.h"
 #include "AntQueen.h"
-#include "../Lua/LuaManager.h"
 
 
 namespace AntZerg
 {
-	typedef std::unordered_map<int, Ant*> AntHash;
-	AntHash antLookupTable;
-	std::shared_ptr<LuaManager> lua(new LuaManager);
-
-	int ID_counter = 0;
-	int numAntsAlive = 0;
-	int numAntsDead = 0;
-	int maxAntsAlive = 0;
-
-
 	bool AntFactory::IsIDPresent(const int ID)
 	{
 		return antLookupTable.find(ID) != antLookupTable.end();
+	}
+
+	AntFactory::AntFactory() 
+		: ID_counter(0), numAntsAlive(0), numAntsDead(0), maxAntsAlive(0), lua(std::make_shared<LuaManager>())
+	{
+		using namespace luabind;
+		module(lua->GetLuaState())
+			[
+				Ant::RegisterLua(),
+				AntLarva::RegisterLua(),
+				AntQueen::RegisterLua(),
+				class_<AntFactory>("AntFactory")
+					.def("CreateAnt", &AntFactory::CreateAnt)
+					.def("GetAntByID", &AntFactory::GetAntByID)
+					.def("RemoveAntByID", &AntFactory::RemoveAntByID)
+			];
+		luabind::globals(lua->GetLuaState())["factory"] = this;
+	}
+
+	AntFactory::~AntFactory()
+	{
+		for(auto iter = antLookupTable.begin(); iter != antLookupTable.end(); ++iter)
+		{
+			delete iter->second;
+		}
 	}
 
 	int AntFactory::CreateAnt(const std::string& antType, const float x, const float y)
@@ -73,13 +86,6 @@ namespace AntZerg
 		return nullptr;
 	}
 
-	void AntFactory::GlueObjects()
-	{
-		Ant::RegisterLua(lua->GetLuaState());
-		AntLarva::RegisterLua(lua->GetLuaState());
-		AntQueen::RegisterLua(lua->GetLuaState());
-	}
-
 	void AntFactory::RemoveAntByID(const int ID)
 	{
 		if(IsIDPresent(ID))
@@ -87,6 +93,14 @@ namespace AntZerg
 			antLookupTable.erase(ID);
 			numAntsDead++;
 			numAntsAlive--;
+		}
+	}
+
+	void AntFactory::RunAll()
+	{
+		for(auto iter = antLookupTable.begin(); iter != antLookupTable.end(); ++iter)
+		{
+			iter->second->Run();
 		}
 	}
 }

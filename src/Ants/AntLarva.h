@@ -25,7 +25,7 @@ namespace AntZerg
 		virtual ~AntLarva();
 		
 		virtual void Eat();
-		static void RegisterLua(lua_State* luaState);
+		static luabind::scope RegisterLua();
 		virtual void Run();
 	};
 

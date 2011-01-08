@@ -1,13 +1,14 @@
 #include "AntQueen.h"
 
+
 #include <iostream>
+
+
 namespace AntZerg
 {
-	static void Register(lua_State *luaState);
-
 	AntQueen::AntQueen(const int ID, std::shared_ptr<LuaManager> lua, const std::string& configFile, 
 		const std::string& actionScriptFile, const float x, const float y)
-		: Ant(ID, false, lua, configFile, actionScriptFile, x, y), numLarvaeProduced(0)
+		: Ant(ID, false, lua, configFile, actionScriptFile, x, y), numLarvaeProduced(0), numLarvaeAvailable(0)
 	{
 		using namespace luabind;
 
@@ -48,27 +49,26 @@ namespace AntZerg
 		return numLarvaeAvailable;
 	}
 
-	void AntQueen::RegisterLua(lua_State* luaState)
+	luabind::scope AntQueen::RegisterLua()
 	{
-		Register(luaState);
+		using namespace luabind;
+		return class_<AntQueen, Ant>("AntQueen")
+			.def("Eat", &AntQueen::Eat)
+			.def("ExtractLarvae", &AntQueen::ExtractLarvae)
+			.def("GetMaxLarvaeProduced", &AntQueen::GetMaxLarvaeProduced)
+			.def("GetNumAvailLarvae", &AntQueen::GetNumAvailLarvae);
 	}
 
 	void AntQueen::Run()
 	{
-		lua->GetObject("QueenRun")(GetID());
-	}
-
-	void Register(lua_State *luaState)
-	{
-		using namespace luabind;
-
-		module(luaState, "AntZerg")
-			[
-				class_<AntQueen, Ant>("AntQueen")
-				.def("Eat", &AntQueen::Eat)
-				.def("ExtractLarvae", &AntQueen::ExtractLarvae)
-				.def("GetMaxLarvaeProduced", &AntQueen::GetMaxLarvaeProduced)
-				.def("GetNumAvailableLarvae", &AntQueen::GetNumAvailLarvae)
-			];
+		try
+		{
+			lua->CallFunction("QueenRun", GetID());
+		}
+		catch (luabind::error& e)
+		{
+			std::string error = lua_tostring( lua->GetLuaState(), -1 );
+			std::cout << "\n" << e.what() << "\n" << error << "\n";
+		}
 	}
 }

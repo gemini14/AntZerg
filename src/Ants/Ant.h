@@ -7,6 +7,7 @@
 
 #include <boost/noncopyable.hpp>
 #include <irrlicht.h>
+#include <luabind/luabind.hpp>
 
 #include "../Lua/LuaManager.h"
 
@@ -51,7 +52,7 @@ namespace AntZerg
 		float GetX() const;
 		float GetY() const;
 		void IncreaseFoodStock();
-		static void RegisterLua(lua_State* luaState);
+		static luabind::scope RegisterLua();
 		void SetScalingFactor(const float scale);
 
 		virtual void Run() = 0;

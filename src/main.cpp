@@ -24,6 +24,8 @@
  an ant colony.
 */
 
+#include <memory>
+
 #include <irrlicht.h>
 
 #include "AppManager.h"
@@ -33,16 +35,15 @@ using namespace AntZerg;
 using namespace irr;
 using namespace std;
 
-#include "Ants\Ant.h"
+
 int main()
 {
 	AppManager *app = new AppManager(800, 800);
 
-	AntFactory::GlueObjects();
-	int q = AntFactory::CreateAnt("queen", 0.f, 0.f);
-	AntFactory::GetAntByID(q)->Run();
-	AntFactory::RemoveAntByID(q);
-
+	std::unique_ptr<AntFactory> factory(new AntFactory);
+	int q = factory->CreateAnt("queen", 0.f, 0.f);
+	factory->RunAll();
+	
 	while (app->device->run())
 	{
 		if (app->device->isWindowActive())
