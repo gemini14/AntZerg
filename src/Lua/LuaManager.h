@@ -3,13 +3,12 @@
 
 
 #include <boost/noncopyable.hpp>
+#include <luabind/luabind.hpp>
+#include <luabind/lua_include.hpp>
 extern "C"
 {
-#include <lua.h>
 #include <lualib.h>
-#include <lauxlib.h>
 }
-#include <luabind/luabind.hpp>
 
 
 namespace AntZerg

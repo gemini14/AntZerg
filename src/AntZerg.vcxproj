@@ -74,6 +74,7 @@
     <ClCompile Include="AppManager.cpp" />
     <ClCompile Include="Lua\LuaManager.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Renderer\DisplayInfo.cpp" />
     <ClCompile Include="Renderer\Renderer.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -83,13 +84,16 @@
     <ClInclude Include="Ants\AntQueen.h" />
     <ClInclude Include="AppManager.h" />
     <ClInclude Include="Lua\LuaManager.h" />
+    <ClInclude Include="Renderer\DisplayInfo.h" />
     <ClInclude Include="Renderer\Renderer.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="scripts\actions\larva.lua" />
     <None Include="scripts\actions\queen.lua" />
-    <None Include="scripts\conf\larva.lua" />
-    <None Include="scripts\conf\queen.lua" />
+    <None Include="scripts\conf\antScales.lua" />
+    <None Include="scripts\conf\antTextures.lua" />
+    <None Include="scripts\conf\larvaConf.lua" />
+    <None Include="scripts\conf\queenConf.lua" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

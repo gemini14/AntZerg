@@ -5,7 +5,7 @@ namespace AntZerg
 {
 	Ant::Ant(const int ID, bool canMove, std::shared_ptr<LuaManager> lua, const std::string& configFile, 
 		const std::string& actionScriptFile, const float x, const float y)
-		: movementEnabled(canMove), lua(lua), position(x, y), displayScalingFactor(1), configFile(configFile), 
+		: movementEnabled(canMove), lua(lua), position(x, y), configFile(configFile), 
 		actionScript(actionScriptFile), food(0), ID(ID)
 	{
 		lua->LoadScript(configFile);
@@ -27,11 +27,6 @@ namespace AntZerg
 		{
 			food--;
 		}
-	}
-
-	float Ant::GetDispScaling() const
-	{
-		return displayScalingFactor;
 	}
 
 	int Ant::GetFood() const
@@ -74,13 +69,5 @@ namespace AntZerg
 				.def("GetID", &Ant::GetID)
 				.def("GetX", &Ant::GetX)
 				.def("GetY", &Ant::GetY);
-	}
-
-	void Ant::SetScalingFactor(const float scale)
-	{
-		if(scale)
-		{
-			displayScalingFactor = scale;
-		}
 	}
 }

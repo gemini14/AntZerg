@@ -39,10 +39,10 @@ using namespace std;
 
 int main()
 {
-	std::shared_ptr<AppManager> app((new AppManager(800, 800)));
-
-	std::unique_ptr<AntFactory> factory(new AntFactory);
-	std::unique_ptr<Renderer> renderer((new Renderer(app)));
+	std::shared_ptr<AppManager> app(std::make_shared<AppManager>(800, 800));
+	std::shared_ptr<LuaManager> luaMngr(std::make_shared<LuaManager>());
+	std::unique_ptr<AntFactory> factory((new AntFactory(luaMngr)));
+	std::unique_ptr<Renderer> renderer((new Renderer(app, luaMngr)));
 
 	int q = factory->CreateAnt("queen", 0.f, 0.f);
 		
