@@ -1,48 +1,69 @@
 #include "AntQueen.h"
 
 
+#include <iostream>
+
+
 namespace AntZerg
 {
-		AntQueen::AntQueen(const int ID, const std::string& configFile, const std::string& actionScriptFile,
-			const float x, const float y)
-			: Ant(ID, false, configFile, actionScriptFile, x, y), numLarvaeProduced(0)
-		{
-		}
-		
-		AntQueen::~AntQueen()
-		{
-		}
+	AntQueen::AntQueen(const int ID, std::shared_ptr<LuaManager> lua, const std::string& configFile, 
+		const std::string& actionScriptFile, const float x, const float y)
+		: Ant(ID, false, lua, configFile, actionScriptFile, x, y), numLarvaeProduced(0), numLarvaeAvailable(0)
+	{
+	}
 
-		void AntQueen::Eat()
-		{
-			if(GetFood() > 0)
-			{
-				DecreaseFoodStock();
-				numLarvaeProduced++;
-				numLarvaeAvailable++;
-			}
-		}
+	AntQueen::~AntQueen()
+	{
+	}
 
-		void AntQueen::ExtractLarvae()
+	void AntQueen::Eat()
+	{
+		if(GetFood() > 0)
 		{
-			if(numLarvaeAvailable)
-			{
-				numLarvaeAvailable--;
-			}
+			DecreaseFoodStock();
+			numLarvaeProduced++;
+			numLarvaeAvailable++;
 		}
+	}
 
-		int AntQueen::GetMaxLarvaeProduced() const
+	void AntQueen::ExtractLarvae()
+	{
+		if(numLarvaeAvailable)
 		{
-			return numLarvaeProduced;
+			numLarvaeAvailable--;
 		}
+	}
 
-		int AntQueen::GetNumAvailLarvae() const
+	int AntQueen::GetMaxLarvaeProduced() const
+	{
+		return numLarvaeProduced;
+	}
+
+	int AntQueen::GetNumAvailLarvae() const
+	{
+		return numLarvaeAvailable;
+	}
+
+	luabind::scope AntQueen::RegisterLua()
+	{
+		using namespace luabind;
+		return class_<AntQueen, Ant>("AntQueen")
+			.def("Eat", &AntQueen::Eat)
+			.def("ExtractLarvae", &AntQueen::ExtractLarvae)
+			.def("GetMaxLarvaeProduced", &AntQueen::GetMaxLarvaeProduced)
+			.def("GetNumAvailLarvae", &AntQueen::GetNumAvailLarvae);
+	}
+
+	void AntQueen::Run()
+	{
+		try
 		{
-			return numLarvaeAvailable;
+			lua->CallFunction("QueenRun", GetID());
 		}
-		
-		void AntQueen::Run()
+		catch (luabind::error& e)
 		{
-			// TODO: implement run for queen
+			std::string error = lua_tostring( lua->GetLuaState(), -1 );
+			std::cout << "\n" << e.what() << "\n" << error << "\n";
 		}
+	}
 }

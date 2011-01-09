@@ -16,15 +16,15 @@ namespace AntZerg
 
 	public:
 
-		AntQueen(const int ID, const std::string& configFile, const std::string& actionScriptFile,
-			const float x, const float y);
+		AntQueen(const int ID, std::shared_ptr<LuaManager> lua, const std::string& configFile, 
+			const std::string& actionScriptFile, const float x, const float y);
 		virtual ~AntQueen();
 
 		virtual void Eat();
 		void ExtractLarvae();
 		int GetMaxLarvaeProduced() const;
 		int GetNumAvailLarvae() const;
-		
+		static luabind::scope RegisterLua();
 		virtual void Run();
 	};
 }

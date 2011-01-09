@@ -19,6 +19,27 @@
     <Filter Include="Source Files\Ants">
       <UniqueIdentifier>{ee70990d-049e-466d-987f-254f70254425}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Scripts">
+      <UniqueIdentifier>{34d425c4-c09d-4708-8868-147f6d34c825}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Scripts\conf">
+      <UniqueIdentifier>{779a03d8-bbcb-4d34-b40c-f347fe8e9e5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Scripts\actions">
+      <UniqueIdentifier>{3a537afa-0bb9-4c28-8a31-e492171e04a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Lua">
+      <UniqueIdentifier>{cfa294ab-2e4e-45c2-8a5f-7e42d7fcdeb3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Lua">
+      <UniqueIdentifier>{7de0eff2-1230-4dca-b608-44f79856d6dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Renderer">
+      <UniqueIdentifier>{7e9a6341-34c9-408f-b51d-004f56b06d1b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Renderer">
+      <UniqueIdentifier>{255b6340-5ea4-494a-ba1e-5798e743363a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AppManager.cpp">
@@ -39,6 +60,15 @@
     <ClCompile Include="Ants\AntQueen.cpp">
       <Filter>Source Files\Ants</Filter>
     </ClCompile>
+    <ClCompile Include="Lua\LuaManager.cpp">
+      <Filter>Source Files\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer\Renderer.cpp">
+      <Filter>Source Files\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer\DisplayInfo.cpp">
+      <Filter>Source Files\Renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppManager.h">
@@ -56,5 +86,34 @@
     <ClInclude Include="Ants\AntQueen.h">
       <Filter>Header Files\Ants</Filter>
     </ClInclude>
+    <ClInclude Include="Lua\LuaManager.h">
+      <Filter>Header Files\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\Renderer.h">
+      <Filter>Header Files\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\DisplayInfo.h">
+      <Filter>Header Files\Renderer</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="scripts\actions\larva.lua">
+      <Filter>Source Files\Scripts\actions</Filter>
+    </None>
+    <None Include="scripts\actions\queen.lua">
+      <Filter>Source Files\Scripts\actions</Filter>
+    </None>
+    <None Include="scripts\conf\antTextures.lua">
+      <Filter>Source Files\Scripts\conf</Filter>
+    </None>
+    <None Include="scripts\conf\antScales.lua">
+      <Filter>Source Files\Scripts\conf</Filter>
+    </None>
+    <None Include="scripts\conf\larvaConf.lua">
+      <Filter>Source Files\Scripts\conf</Filter>
+    </None>
+    <None Include="scripts\conf\queenConf.lua">
+      <Filter>Source Files\Scripts\conf</Filter>
+    </None>
   </ItemGroup>
 </Project>
