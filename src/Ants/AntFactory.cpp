@@ -15,8 +15,8 @@ namespace AntZerg
 		return antLookupTable.find(ID) != antLookupTable.end();
 	}
 
-	AntFactory::AntFactory() 
-		: ID_counter(0), numAntsAlive(0), numAntsDead(0), maxAntsAlive(0), lua(std::make_shared<LuaManager>())
+	AntFactory::AntFactory(std::shared_ptr<LuaManager> lua) 
+		: ID_counter(0), numAntsAlive(0), numAntsDead(0), maxAntsAlive(0), lua(lua)
 	{
 		using namespace luabind;
 		module(lua->GetLuaState())
@@ -46,11 +46,11 @@ namespace AntZerg
 
 		if(antType == "queen")
 		{
-			temp = new AntQueen(++ID_counter, lua, "scripts/conf/queen.lua", "scripts/actions/queen.lua", x, y);
+			temp = new AntQueen(++ID_counter, lua, "scripts/conf/queenConf.lua", "scripts/actions/queen.lua", x, y);
 		}
 		else if(antType == "larva")
 		{
-			temp = new AntLarva(++ID_counter, lua, "scripts/conf/larva.lua", "scripts/actions/larva.lua", x, y);
+			temp = new AntLarva(++ID_counter, lua, "scripts/conf/larvaConf.lua", "scripts/actions/larva.lua", x, y);
 		}
 		else if(antType == "worker")
 		{
@@ -94,6 +94,10 @@ namespace AntZerg
 			numAntsDead++;
 			numAntsAlive--;
 		}
+	}
+
+	void AntFactory::RenderUpdateAll()
+	{
 	}
 
 	void AntFactory::RunAll()

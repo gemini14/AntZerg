@@ -23,8 +23,6 @@ namespace AntZerg
 		// this could be changed to another vector implementation later if needed
 		irr::core::vector2df position;	
 		
-		float displayScalingFactor;
-		
 		std::string configFile;
 		std::string actionScript;
 
@@ -45,7 +43,6 @@ namespace AntZerg
 		bool CanMove() const;
 		void DecreaseFoodStock();
 		virtual void Eat() = 0;
-		float GetDispScaling() const;
 		int GetFood() const;
 		int GetID() const;
 		irr::core::vector2df GetPosition() const;
@@ -53,8 +50,7 @@ namespace AntZerg
 		float GetY() const;
 		void IncreaseFoodStock();
 		static luabind::scope RegisterLua();
-		void SetScalingFactor(const float scale);
-
+		
 		virtual void Run() = 0;
 	};
 }

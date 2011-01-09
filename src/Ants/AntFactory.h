@@ -2,10 +2,11 @@
 #define ANTFACTORY_H
 
 
-#include <boost/noncopyable.hpp>
 #include <memory>
 #include <string>
 #include <unordered_map>
+
+#include <boost/noncopyable.hpp>
 
 #include "../Lua/LuaManager.h"
 
@@ -29,12 +30,13 @@ namespace AntZerg
 
 	public:
 
-		AntFactory();
+		AntFactory(std::shared_ptr<LuaManager> lua);
 		~AntFactory();
 
 		int CreateAnt(const std::string& antType, const float x, const float y);
 		Ant* GetAntByID(const int ID);
 		void RemoveAntByID(const int ID);
+		void RenderUpdateAll();
 		void RunAll();
 	};
 
