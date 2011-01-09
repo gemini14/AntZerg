@@ -3,23 +3,71 @@
 
 namespace AntZerg
 {
-	Ant::Ant(const std::string& configFile, const std::string& actionScriptFile, const float scalingFactor,
-		const float x, const float y)
-		: position(x, y), displayScalingFactor(scalingFactor), configFile(configFile), actionScript(actionScriptFile)
+	Ant::Ant(const int ID, bool canMove, std::shared_ptr<LuaManager> lua, const std::string& configFile, 
+		const std::string& actionScriptFile, const float x, const float y)
+		: movementEnabled(canMove), lua(lua), position(x, y), configFile(configFile), 
+		actionScript(actionScriptFile), food(0), ID(ID)
 	{
+		lua->LoadScript(configFile);
+		lua->LoadScript(actionScriptFile);
 	}
 
 	Ant::~Ant()
 	{
 	}
 
-	float Ant::GetDispScaling() const
+	bool Ant::CanMove() const
 	{
-		return displayScalingFactor;
+		return movementEnabled;
+	}
+
+	void Ant::DecreaseFoodStock()
+	{
+		if(food)
+		{
+			food--;
+		}
+	}
+
+	int Ant::GetFood() const
+	{
+		return food;
+	}
+
+	int Ant::GetID() const
+	{
+		return ID;
 	}
 
 	irr::core::vector2df Ant::GetPosition() const
 	{
 		return position;
+	}
+
+	float Ant::GetX() const
+	{
+		return position.X;
+	}
+
+	float Ant::GetY() const
+	{
+		return position.Y;
+	}
+
+	void Ant::IncreaseFoodStock()
+	{
+		food++;
+	}
+
+	luabind::scope Ant::RegisterLua()
+	{
+		using namespace luabind;
+		return class_<Ant>("Ant")
+				.def("CanMove", &Ant::CanMove)
+				.def("Eat", &Ant::Eat)
+				.def("GetFood", &Ant::GetFood)
+				.def("GetID", &Ant::GetID)
+				.def("GetX", &Ant::GetX)
+				.def("GetY", &Ant::GetY);
 	}
 }
