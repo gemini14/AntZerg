@@ -1,7 +1,7 @@
 #include "AntFactory.h"
 
 
-#include <unordered_map>
+#include <boost/foreach.hpp>
 
 #include "Ant.h"
 #include "AntLarva.h"
@@ -10,31 +10,47 @@
 
 namespace AntZerg
 {
-	typedef std::unordered_map<int, Ant*> AntHash;
-	AntHash antLookupTable;
-
-	int ID_counter = 0;
-	int numAntsAlive = 0;
-	int numAntsDead = 0;
-	int maxAntsAlive = 0;
-
-
 	bool AntFactory::IsIDPresent(const int ID)
 	{
 		return antLookupTable.find(ID) != antLookupTable.end();
 	}
 
-	Ant* AntFactory::CreateAnt(const std::string& antType, const float x, const float y)
+	AntFactory::AntFactory(std::shared_ptr<LuaManager> lua) 
+		: ID_counter(0), numAntsAlive(0), numAntsDead(0), maxAntsAlive(0), lua(lua)
+	{
+		using namespace luabind;
+		module(lua->GetLuaState())
+			[
+				Ant::RegisterLua(),
+				AntLarva::RegisterLua(),
+				AntQueen::RegisterLua(),
+				class_<AntFactory>("AntFactory")
+					.def("CreateAnt", &AntFactory::CreateAnt)
+					.def("GetAntByID", &AntFactory::GetAntByID)
+					.def("RemoveAntByID", &AntFactory::RemoveAntByID)
+			];
+		luabind::globals(lua->GetLuaState())["factory"] = this;
+	}
+
+	AntFactory::~AntFactory()
+	{
+		for(auto iter = antLookupTable.begin(); iter != antLookupTable.end(); ++iter)
+		{
+			delete iter->second;
+		}
+	}
+
+	int AntFactory::CreateAnt(const std::string& antType, const float x, const float y)
 	{
 		Ant *temp = nullptr;
 
 		if(antType == "queen")
 		{
-			temp = new AntQueen(++ID_counter, "scripts/conf/queen.lua", "scripts/actions/queen.lua", x, y);
+			temp = new AntQueen(++ID_counter, lua, "scripts/conf/queenConf.lua", "scripts/actions/queen.lua", x, y);
 		}
 		else if(antType == "larva")
 		{
-			temp = new AntLarva(++ID_counter, "scripts/conf/larva.lua", "scripts/actions/larva.lua", x, y);
+			temp = new AntLarva(++ID_counter, lua, "scripts/conf/larvaConf.lua", "scripts/actions/larva.lua", x, y);
 		}
 		else if(antType == "worker")
 		{
@@ -56,7 +72,7 @@ namespace AntZerg
 			numAntsAlive++;
 			maxAntsAlive++;
 		}
-		return temp;
+		return temp ? ID_counter : -1;
 	}
 
 	Ant* AntFactory::GetAntByID(const int ID)
@@ -77,6 +93,18 @@ namespace AntZerg
 			antLookupTable.erase(ID);
 			numAntsDead++;
 			numAntsAlive--;
+		}
+	}
+
+	void AntFactory::RenderUpdateAll()
+	{
+	}
+
+	void AntFactory::RunAll()
+	{
+		for(auto iter = antLookupTable.begin(); iter != antLookupTable.end(); ++iter)
+		{
+			iter->second->Run();
 		}
 	}
 }

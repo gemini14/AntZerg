@@ -20,12 +20,12 @@ namespace AntZerg
 		
 	public:
 
-		AntLarva(const int ID, const std::string& configFile, const std::string& actionScriptFile, 
-			const float x, const float y);
+		AntLarva(const int ID, std::shared_ptr<LuaManager> lua, const std::string& configFile, 
+			const std::string& actionScriptFile, const float x, const float y);
 		virtual ~AntLarva();
-				
+		
 		virtual void Eat();
-
+		static luabind::scope RegisterLua();
 		virtual void Run();
 	};
 
