@@ -2,6 +2,7 @@
 
 
 #include <boost/foreach.hpp>
+#include <luabind/iterator_policy.hpp>
 
 #include "Ant.h"
 #include "AntLarva.h"
@@ -27,7 +28,7 @@ namespace AntZerg
 				class_<AntFactory>("AntFactory")
 					.def("CreateAnt", &AntFactory::CreateAnt)
 					.def("GetAntByID", &AntFactory::GetAntByID)
-					.def("RemoveAntByID", &AntFactory::RemoveAntByID)
+					.def("RemoveAnt", &AntFactory::RemoveAnt)
 			];
 		luabind::globals(lua->GetLuaState())["factory"] = this;
 	}
@@ -86,7 +87,7 @@ namespace AntZerg
 		return nullptr;
 	}
 
-	void AntFactory::RemoveAntByID(const int ID)
+	void AntFactory::RemoveAnt(const int ID)
 	{
 		if(IsIDPresent(ID))
 		{
@@ -94,10 +95,6 @@ namespace AntZerg
 			numAntsDead++;
 			numAntsAlive--;
 		}
-	}
-
-	void AntFactory::RenderUpdateAll()
-	{
 	}
 
 	void AntFactory::RunAll()

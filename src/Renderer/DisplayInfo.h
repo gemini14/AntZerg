@@ -22,6 +22,10 @@ namespace AntZerg
 		DisplayInfo(irr::video::IVideoDriver *driver, const float scale, 
 			const std::string& texture1, const std::string& texture2);
 		~DisplayInfo();
+
+		float GetDisplayScale() const;
+		irr::video::ITexture * const GetTexture1() const;
+		irr::video::ITexture * const GetTexture2() const;
 	};
 }
 

@@ -18,6 +18,7 @@ namespace AntZerg
 	class AntFactory : boost::noncopyable
 	{
 		typedef std::unordered_map<int, Ant*> AntHash;
+
 		AntHash antLookupTable;
 		std::shared_ptr<LuaManager> lua;
 
@@ -35,8 +36,7 @@ namespace AntZerg
 
 		int CreateAnt(const std::string& antType, const float x, const float y);
 		Ant* GetAntByID(const int ID);
-		void RemoveAntByID(const int ID);
-		void RenderUpdateAll();
+		void RemoveAnt(const int ID);
 		void RunAll();
 	};
 

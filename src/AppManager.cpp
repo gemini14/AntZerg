@@ -24,5 +24,4 @@ namespace AntZerg
 	{
 		device->drop();
 	}
-
 }

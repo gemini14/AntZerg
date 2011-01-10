@@ -40,6 +40,9 @@
     <Filter Include="Source Files\Renderer">
       <UniqueIdentifier>{255b6340-5ea4-494a-ba1e-5798e743363a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\AntTextures">
+      <UniqueIdentifier>{cb25bb0e-9066-4751-92b0-1394b3c3f606}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AppManager.cpp">
@@ -114,6 +117,42 @@
     </None>
     <None Include="scripts\conf\queenConf.lua">
       <Filter>Source Files\Scripts\conf</Filter>
+    </None>
+    <None Include="scripts\conf\startup.lua">
+      <Filter>Source Files\Scripts\conf</Filter>
+    </None>
+    <None Include="scripts\antUtilities.lua">
+      <Filter>Source Files\Scripts</Filter>
+    </None>
+    <None Include="assets\art\antLarva1.png">
+      <Filter>Resource Files\AntTextures</Filter>
+    </None>
+    <None Include="assets\art\antLarva2.png">
+      <Filter>Resource Files\AntTextures</Filter>
+    </None>
+    <None Include="assets\art\antNurse1.png">
+      <Filter>Resource Files\AntTextures</Filter>
+    </None>
+    <None Include="assets\art\antNurse2.png">
+      <Filter>Resource Files\AntTextures</Filter>
+    </None>
+    <None Include="assets\art\antQueen1.png">
+      <Filter>Resource Files\AntTextures</Filter>
+    </None>
+    <None Include="assets\art\antQueen2.png">
+      <Filter>Resource Files\AntTextures</Filter>
+    </None>
+    <None Include="assets\art\antWarrior1.png">
+      <Filter>Resource Files\AntTextures</Filter>
+    </None>
+    <None Include="assets\art\antWarrior2.png">
+      <Filter>Resource Files\AntTextures</Filter>
+    </None>
+    <None Include="assets\art\antWorker1.png">
+      <Filter>Resource Files\AntTextures</Filter>
+    </None>
+    <None Include="assets\art\antWorker2.png">
+      <Filter>Resource Files\AntTextures</Filter>
     </None>
   </ItemGroup>
 </Project>

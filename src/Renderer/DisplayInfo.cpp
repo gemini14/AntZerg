@@ -13,7 +13,20 @@ namespace AntZerg
 
 	DisplayInfo::~DisplayInfo()
 	{
-		image1->drop();
-		image2->drop();
+	}
+
+	float DisplayInfo::GetDisplayScale() const
+	{
+		return displayScale;
+	}
+
+	irr::video::ITexture * const DisplayInfo::GetTexture1() const
+	{
+		return image1;
+	}
+
+	irr::video::ITexture * const DisplayInfo::GetTexture2() const
+	{
+		return image2;
 	}
 }

@@ -1,0 +1,1 @@
+AddAnt("queen", 1, 1)

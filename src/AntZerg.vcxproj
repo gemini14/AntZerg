@@ -88,12 +88,24 @@
     <ClInclude Include="Renderer\Renderer.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="assets\art\antLarva1.png" />
+    <None Include="assets\art\antLarva2.png" />
+    <None Include="assets\art\antNurse1.png" />
+    <None Include="assets\art\antNurse2.png" />
+    <None Include="assets\art\antQueen1.png" />
+    <None Include="assets\art\antQueen2.png" />
+    <None Include="assets\art\antWarrior1.png" />
+    <None Include="assets\art\antWarrior2.png" />
+    <None Include="assets\art\antWorker1.png" />
+    <None Include="assets\art\antWorker2.png" />
     <None Include="scripts\actions\larva.lua" />
     <None Include="scripts\actions\queen.lua" />
+    <None Include="scripts\antUtilities.lua" />
     <None Include="scripts\conf\antScales.lua" />
     <None Include="scripts\conf\antTextures.lua" />
     <None Include="scripts\conf\larvaConf.lua" />
     <None Include="scripts\conf\queenConf.lua" />
+    <None Include="scripts\conf\startup.lua" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
