@@ -49,16 +49,20 @@ int main()
 
 	auto prevTime = app->device->getTimer()->getTime();
 	
-	while (app->device->run())
+	while(app->device->run())
 	{
 		if (app->device->isWindowActive())
 		{
-			app->device->getTimer()->start();
+			if(app->device->getTimer()->isStopped())
+			{
+				app->device->getTimer()->start();
+			}
 			auto currentTime = app->device->getTimer()->getTime();
-			auto dt = currentTime - prevTime;
+			double dt = currentTime - prevTime;
 			prevTime = currentTime;
+			dt /= 1000.;
 
-			factory->RunAll(dt/1000.);
+			factory->RunAll(dt);
 			luaMngr->CallFunction("RenderUpdateAllAnts");
 			
 			app->driver->beginScene(true, true, video::SColor(255, 100, 101, 140));

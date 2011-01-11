@@ -39,7 +39,7 @@ namespace AntZerg
 		}
 		catch (luabind::error& e)
 		{
-			std::string error = lua_tostring( lua->GetLuaState(), -1 );
+			std::string error = lua_tostring(lua->GetLuaState(), -1);
 			std::cout << "\n" << e.what() << "\n" << error << "\n";
 		}
 	}
