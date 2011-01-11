@@ -50,6 +50,7 @@ namespace AntZerg
 		float GetX() const;
 		float GetY() const;
 		void IncreaseFoodStock();
+		void PositionChange(const float delta_x, const float delta_y);
 		static luabind::scope RegisterLua();
 		
 		virtual void Run(const double dt) = 0;

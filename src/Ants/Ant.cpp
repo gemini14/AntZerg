@@ -59,6 +59,12 @@ namespace AntZerg
 		food++;
 	}
 
+	void Ant::PositionChange(const float delta_x, const float delta_y)
+	{
+		position.X += delta_x;
+		position.Y += delta_y;
+	}
+
 	luabind::scope Ant::RegisterLua()
 	{
 		using namespace luabind;
@@ -68,6 +74,7 @@ namespace AntZerg
 				.def("GetFood", &Ant::GetFood)
 				.def("GetID", &Ant::GetID)
 				.def("GetX", &Ant::GetX)
-				.def("GetY", &Ant::GetY);
+				.def("GetY", &Ant::GetY)
+				.def("PositionChange", &Ant::PositionChange);
 	}
 }

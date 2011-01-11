@@ -198,6 +198,8 @@ namespace AntZerg
 			antLookupTable[ID]->x = x;
 			antLookupTable[ID]->y = y;
 			antLookupTable[ID]->rotation = rotation;
+
+			antLookupTable[ID]->node->setPosition(irr::core::vector3df(x, 0, y));
 		}
 	}
 }
