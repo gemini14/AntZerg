@@ -14,12 +14,15 @@
 namespace AntZerg
 {
 	class Ant;
+	class AntWarehouse;
 
 	class AntFactory : boost::noncopyable
 	{
 		typedef std::unordered_map<int, Ant*> AntHash;
+
 		AntHash antLookupTable;
 		std::shared_ptr<LuaManager> lua;
+		AntWarehouse *warehouse;
 
 		int ID_counter;
 		int numAntsAlive;
@@ -34,10 +37,11 @@ namespace AntZerg
 		~AntFactory();
 
 		int CreateAnt(const std::string& antType, const float x, const float y);
+		void CreateWarehouse(const float x, const float y);
 		Ant* GetAntByID(const int ID);
-		void RemoveAntByID(const int ID);
-		void RenderUpdateAll();
-		void RunAll();
+		AntWarehouse* GetWarehouse() const;
+		void RemoveAnt(const int ID);
+		void RunAll(const double dt);
 	};
 
 }

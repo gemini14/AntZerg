@@ -43,16 +43,24 @@ int main()
 	std::shared_ptr<LuaManager> luaMngr(std::make_shared<LuaManager>());
 	std::unique_ptr<AntFactory> factory((new AntFactory(luaMngr)));
 	std::unique_ptr<Renderer> renderer((new Renderer(app, luaMngr)));
+	
+	luaMngr->LoadScript("scripts/antUtilities.lua");
+	luaMngr->LoadScript("scripts/conf/startup.lua");
 
-	int q = factory->CreateAnt("queen", 0.f, 0.f);
-		
+	auto prevTime = app->device->getTimer()->getTime();
+	
 	while (app->device->run())
 	{
 		if (app->device->isWindowActive())
 		{
-			factory->RunAll();
-			factory->RenderUpdateAll();
+			app->device->getTimer()->start();
+			auto currentTime = app->device->getTimer()->getTime();
+			auto dt = currentTime - prevTime;
+			prevTime = currentTime;
 
+			factory->RunAll(dt/1000.);
+			luaMngr->CallFunction("RenderUpdateAllAnts");
+			
 			app->driver->beginScene(true, true, video::SColor(255, 100, 101, 140));
 
 			renderer->DrawAll();
@@ -64,6 +72,7 @@ int main()
 		}
 		else
 		{
+			app->device->getTimer()->stop();
 			app->device->yield();
 		}
 	}

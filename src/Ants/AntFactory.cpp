@@ -2,10 +2,13 @@
 
 
 #include <boost/foreach.hpp>
+#include <luabind/iterator_policy.hpp>
 
 #include "Ant.h"
 #include "AntLarva.h"
 #include "AntQueen.h"
+#include "AntNurse.h"
+#include "AntWarehouse.h"
 
 
 namespace AntZerg
@@ -16,7 +19,8 @@ namespace AntZerg
 	}
 
 	AntFactory::AntFactory(std::shared_ptr<LuaManager> lua) 
-		: ID_counter(0), numAntsAlive(0), numAntsDead(0), maxAntsAlive(0), lua(lua)
+		: ID_counter(0), numAntsAlive(0), numAntsDead(0), maxAntsAlive(0), lua(lua),
+		warehouse(nullptr)
 	{
 		using namespace luabind;
 		module(lua->GetLuaState())
@@ -24,10 +28,14 @@ namespace AntZerg
 				Ant::RegisterLua(),
 				AntLarva::RegisterLua(),
 				AntQueen::RegisterLua(),
+				AntNurse::RegisterLua(),
+				AntWarehouse::RegisterLua(),
 				class_<AntFactory>("AntFactory")
 					.def("CreateAnt", &AntFactory::CreateAnt)
 					.def("GetAntByID", &AntFactory::GetAntByID)
-					.def("RemoveAntByID", &AntFactory::RemoveAntByID)
+					.def("RemoveAnt", &AntFactory::RemoveAnt)
+					.def("CreateWarehouse", &AntFactory::CreateWarehouse)
+					.def("GetWarehouse", &AntFactory::GetWarehouse)
 			];
 		luabind::globals(lua->GetLuaState())["factory"] = this;
 	}
@@ -57,6 +65,7 @@ namespace AntZerg
 		}
 		else if(antType == "nurse")
 		{
+			temp = new AntNurse(++ID_counter, lua, "scripts/conf/nurseConf.lua", "scripts/actions/nurse.lua", x, y);
 		}
 		else if(antType == "warrior")
 		{
@@ -75,6 +84,14 @@ namespace AntZerg
 		return temp ? ID_counter : -1;
 	}
 
+	void AntFactory::CreateWarehouse(const float x, const float y)
+	{
+		if(!warehouse)
+		{
+			warehouse = new AntWarehouse(x, y);
+		}
+	}
+
 	Ant* AntFactory::GetAntByID(const int ID)
 	{
 		// this check is done to ensure that we won't end up inserting a new value if the ID doesn't exist
@@ -86,7 +103,12 @@ namespace AntZerg
 		return nullptr;
 	}
 
-	void AntFactory::RemoveAntByID(const int ID)
+	AntWarehouse* AntFactory::GetWarehouse() const
+	{
+		return warehouse;
+	}
+
+	void AntFactory::RemoveAnt(const int ID)
 	{
 		if(IsIDPresent(ID))
 		{
@@ -96,15 +118,11 @@ namespace AntZerg
 		}
 	}
 
-	void AntFactory::RenderUpdateAll()
-	{
-	}
-
-	void AntFactory::RunAll()
+	void AntFactory::RunAll(const double dt)
 	{
 		for(auto iter = antLookupTable.begin(); iter != antLookupTable.end(); ++iter)
 		{
-			iter->second->Run();
+			iter->second->Run(dt);
 		}
 	}
 }

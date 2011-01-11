@@ -25,7 +25,7 @@ namespace AntZerg
 		int GetMaxLarvaeProduced() const;
 		int GetNumAvailLarvae() const;
 		static luabind::scope RegisterLua();
-		virtual void Run();
+		virtual void Run(const double dt);
 	};
 }
 

@@ -19,9 +19,22 @@ namespace AntZerg
 		lua_close(luaState);
 	}
 
-	void LuaManager::CallFunction(const std::string& functionName, int ID)
+	void LuaManager::CallFunction(const std::string& functionName)
 	{
-		luabind::call_function<void>(luaState, functionName.c_str(), ID);
+		try
+		{
+			luabind::call_function<void>(luaState, functionName.c_str());
+		}
+		catch (luabind::error& e)
+		{
+			std::string error = lua_tostring( luaState, -1 );
+			std::cout << "\n" << e.what() << "\n" << error << "\n";
+		}
+	}
+
+	void LuaManager::CallFunction(const std::string& functionName, int ID, const double dt)
+	{
+		luabind::call_function<void>(luaState, functionName.c_str(), ID, dt);
 	}
 
 	lua_State* const LuaManager::GetLuaState() const

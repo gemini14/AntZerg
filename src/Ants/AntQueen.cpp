@@ -1,9 +1,6 @@
 #include "AntQueen.h"
 
 
-#include <iostream>
-
-
 namespace AntZerg
 {
 	AntQueen::AntQueen(const int ID, std::shared_ptr<LuaManager> lua, const std::string& configFile, 
@@ -54,11 +51,11 @@ namespace AntZerg
 			.def("GetNumAvailLarvae", &AntQueen::GetNumAvailLarvae);
 	}
 
-	void AntQueen::Run()
+	void AntQueen::Run(const double dt)
 	{
 		try
 		{
-			lua->CallFunction("QueenRun", GetID());
+			lua->CallFunction("QueenRun", GetID(), dt);
 		}
 		catch (luabind::error& e)
 		{

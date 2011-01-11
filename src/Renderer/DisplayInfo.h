@@ -14,14 +14,16 @@ namespace AntZerg
 	private:
 
 		float displayScale;
-		irr::video::ITexture *image1;
-		irr::video::ITexture *image2;
-
+		irr::video::ITexture *image;
+		
 	public:
 
 		DisplayInfo(irr::video::IVideoDriver *driver, const float scale, 
-			const std::string& texture1, const std::string& texture2);
+			const std::string& texture1);
 		~DisplayInfo();
+
+		float GetDisplayScale() const;
+		irr::video::ITexture * const GetTexture() const;
 	};
 }
 

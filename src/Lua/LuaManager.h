@@ -25,7 +25,8 @@ namespace AntZerg
 		LuaManager();
 		~LuaManager();
 
-		void CallFunction(const std::string& functionName, int ID);
+		void CallFunction(const std::string& functionName);
+		void CallFunction(const std::string& functionName, int ID, const double dt);
 		lua_State* const GetLuaState() const;
 		luabind::object GetObject(const std::string& objName);
 		bool LoadScript(const std::string& filename);

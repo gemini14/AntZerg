@@ -1,3 +1,3 @@
 --Display scales
 
-AntScales = {queen = 10, larva = 0.5}
+AntScales = {queen = 5, larva = 0.5, nurse = 1}
