@@ -18,3 +18,9 @@ function RenderUpdateAllAnts()
 		renderer:UpdateAnt(ID, ant:GetX(), ant:GetY(), 0);
 	end
 end
+
+function CreateWarehouse(x, y)
+	factory:CreateWarehouse(x, y)
+	local warehouse = factory:GetWarehouse()
+	renderer:AddWarehouse(warehouse:GetX(), warehouse:GetY())
+end

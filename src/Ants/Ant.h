@@ -2,6 +2,7 @@
 #define ANT_H
 
 
+#include <iostream>
 #include <memory>
 #include <string>
 
@@ -51,7 +52,7 @@ namespace AntZerg
 		void IncreaseFoodStock();
 		static luabind::scope RegisterLua();
 		
-		virtual void Run() = 0;
+		virtual void Run(const double dt) = 0;
 	};
 }
 

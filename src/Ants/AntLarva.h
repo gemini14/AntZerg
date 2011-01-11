@@ -26,7 +26,7 @@ namespace AntZerg
 		
 		virtual void Eat();
 		static luabind::scope RegisterLua();
-		virtual void Run();
+		virtual void Run(const double dt);
 	};
 
 }

@@ -8,7 +8,7 @@ namespace AntZerg
 {
 	Renderer::AntInfo::AntInfo(const AntType type, const float x, const float y, 
 		const float rotation, irr::scene::ISceneNode *node)
-		: type(type), x(x), y(y), rotation(rotation), node(node), texture1(true)
+		: type(type), x(x), y(y), rotation(rotation), node(node)
 	{
 	}
 
@@ -18,7 +18,7 @@ namespace AntZerg
 	}
 
 	Renderer::Renderer(std::shared_ptr<AppManager> app, std::shared_ptr<LuaManager> lua)
-		: app(app), lua(lua)
+		: app(app), lua(lua), warehouseNode(nullptr)
 	{
 		using namespace luabind;
 		using namespace irr;
@@ -46,8 +46,7 @@ namespace AntZerg
 				std::shared_ptr<DisplayInfo> dispInfo((new DisplayInfo(
 					app->driver, 
 					object_cast<float>(scaleTable["queen"]),
-					object_cast<std::string>(texTable["queen1"]),
-					object_cast<std::string>(texTable["queen2"]))));
+					object_cast<std::string>(texTable["queen"]))));
 				pairInfo.second = dispInfo;
 				pairInfo.first = QUEEN;
 			}
@@ -56,10 +55,18 @@ namespace AntZerg
 				std::shared_ptr<DisplayInfo> dispInfo((new DisplayInfo(
 					app->driver, 
 					object_cast<float>(scaleTable["larva"]),
-					object_cast<std::string>(texTable["larva1"]),
-					object_cast<std::string>(texTable["larva2"]))));
+					object_cast<std::string>(texTable["larva"]))));
 				pairInfo.second = dispInfo;
 				pairInfo.first = LARVA;
+			}
+			else if(antType == "nurse")
+			{
+				std::shared_ptr<DisplayInfo> dispInfo((new DisplayInfo(
+					app->driver, 
+					object_cast<float>(scaleTable["nurse"]),
+					object_cast<std::string>(texTable["nurse"]))));
+				pairInfo.second = dispInfo;
+				pairInfo.first = NURSE;
 			}
 			else
 			{
@@ -75,20 +82,23 @@ namespace AntZerg
 
 		lua->LoadScript("scripts/conf/antTextures.lua");
 		lua->LoadScript("scripts/conf/antScales.lua");
+		lua->LoadScript("scripts/conf/supportItemTextures.lua");
 
 		fetchInfo("queen");
 		fetchInfo("larva");
+		fetchInfo("nurse");
 
 		module(lua->GetLuaState())
 			[
 				class_<Renderer>("Renderer")
 				.def("AddAnt", &Renderer::AddAnt)
+				.def("AddWarehouse", &Renderer::AddWarehouse)
 				.def("RemoveAnt", &Renderer::RemoveAnt)
 				.def("UpdateAnt", &Renderer::UpdateAnt)
 			];
 		luabind::globals(lua->GetLuaState())["renderer"] = this;
 
-		app->smgr->addCameraSceneNode(0, core::vector3df(3,25,0), core::vector3df(0,0,0));
+		app->smgr->addCameraSceneNode(0, core::vector3df(0,20,-5), core::vector3df(0,0,0));
 	}
 
 	Renderer::~Renderer()
@@ -144,34 +154,32 @@ namespace AntZerg
 			antLookupTable[ID] = new AntInfo(antType, x, y, rotation, 
 				app->smgr->addSphereSceneNode(0.5f, 16, 0, -1, core::vector3df(x, 0, y), core::vector3df(0,0,0),
 				core::vector3df(scale, scale, scale)));
-			antLookupTable[ID]->node->setMaterialTexture(0, antDisplayInfoTable[antType]->GetTexture1());
+			antLookupTable[ID]->node->setMaterialTexture(0, antDisplayInfoTable[antType]->GetTexture());
 			antLookupTable[ID]->node->setMaterialFlag(video::EMF_LIGHTING, false);
+		}
+	}
+
+	void Renderer::AddWarehouse(const float x, const float y)
+	{
+		using namespace luabind;
+		using namespace irr;
+
+		if(!warehouseNode)
+		{
+			warehouseNode = app->smgr->addSphereSceneNode(0.5f, 16, 0, -1, core::vector3df(x, 0, y));
+			
+			auto table = lua->GetObject("SupportTextures");
+			assert(table.is_valid() && type(table) == LUA_TTABLE);
+			std::string texFile = object_cast<std::string>(table["warehouse"]);
+			auto tex = app->driver->getTexture(texFile.c_str());
+			
+			warehouseNode->setMaterialTexture(0, tex);
+			warehouseNode->setMaterialFlag(video::EMF_LIGHTING, false);
 		}
 	}
 
 	void Renderer::DrawAll()
 	{
-		static auto prevTime = app->device->getTimer()->getTime();
-		auto dt = app->device->getTimer()->getTime() - prevTime;
-		dt /= 1000;
-		dt %= 2;
-		for(auto iter = antLookupTable.begin(); iter != antLookupTable.end(); ++iter)
-		{
-			bool currentTexture = iter->second->texture1;
-			bool updateTexture = currentTexture && dt;
-			if(updateTexture != currentTexture)
-			{
-				iter->second->texture1 = !currentTexture;
-				switch(currentTexture)
-				{
-				case true:
-					iter->second->node->setMaterialTexture(0, antDisplayInfoTable[iter->second->type]->GetTexture2());
-					break;
-				case false:
-					iter->second->node->setMaterialTexture(0, antDisplayInfoTable[iter->second->type]->GetTexture1());
-				}
-			}
-		}
 	}
 
 	void Renderer::RemoveAnt(const int ID)

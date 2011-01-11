@@ -11,6 +11,7 @@
 #include <irrlicht.h>
 
 #include "../Ants/Ant.h"
+#include "../Ants/AntWarehouse.h"
 #include "../AppManager.h"
 #include "../Lua/LuaManager.h"
 #include "DisplayInfo.h"
@@ -32,7 +33,6 @@ namespace AntZerg
 			float x;
 			float y;
 			float rotation;
-			bool texture1;
 			irr::scene::ISceneNode *node;
 
 			AntInfo(const AntType type, const float x, const float y, const float rotation, irr::scene::ISceneNode *node);
@@ -46,6 +46,7 @@ namespace AntZerg
 		AntHash antLookupTable;
 		std::shared_ptr<AppManager> app;
 		std::shared_ptr<LuaManager> lua;
+		irr::scene::ISceneNode *warehouseNode;
 
 		bool IsIDPresent(const int ID);
 		AntType GetAntTypeFromString(const std::string& type);
@@ -56,6 +57,7 @@ namespace AntZerg
 		~Renderer();
 
 		void AddAnt(const int ID, const std::string& type, const float x, const float y, const float rotation);
+		void AddWarehouse(const float x, const float y);
 		void DrawAll();
 		void RemoveAnt(const int ID);
 		void UpdateAnt(const int ID, const float x, const float y, const float rotation);

@@ -1,10 +1,9 @@
 --Queen action script
 
-function QueenRun(ID)
-	--print("Hello, I finally got this to work!!")
-	--print("The Queen is runnnnnnning!")
-	--print(ID)
-	--print(table.GetNumAvailLarvae)
-	--ant = factory:GetAntByID(ID)
-	--print(ant:GetNumAvailLarvae())
+function QueenRun(ID, dt)
+	ant = factory:GetAntByID(ID)
+	if dt > 1 then
+		ant:Eat()
+		print("Queen just ran. Food: "..ant:GetFood().." Larvae: "..ant:GetNumAvailLarvae())
+	end
 end

@@ -1,5 +1,5 @@
 --Larva action script
 
-function LarvaRun(ID)
+function LarvaRun(ID, dt)
 	
 end

@@ -4,11 +4,10 @@
 namespace AntZerg
 {
 	DisplayInfo::DisplayInfo(irr::video::IVideoDriver *driver, const float scale, 
-		const std::string& texture1, const std::string& texture2)
+		const std::string& texture)
 		: displayScale(scale)
 	{
-		image1 = driver->getTexture(texture1.c_str());
-		image2 = driver->getTexture(texture2.c_str());
+		image = driver->getTexture(texture.c_str());
 	}
 
 	DisplayInfo::~DisplayInfo()
@@ -20,13 +19,8 @@ namespace AntZerg
 		return displayScale;
 	}
 
-	irr::video::ITexture * const DisplayInfo::GetTexture1() const
+	irr::video::ITexture * const DisplayInfo::GetTexture() const
 	{
-		return image1;
-	}
-
-	irr::video::ITexture * const DisplayInfo::GetTexture2() const
-	{
-		return image2;
+		return image;
 	}
 }
