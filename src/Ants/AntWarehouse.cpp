@@ -3,7 +3,7 @@
 
 namespace AntZerg
 {
-	const int STARTING_FOOD = 10;
+	const int STARTING_FOOD = 50;
 	const int WITHDRAW_AMT = 1;
 
 	AntWarehouse::AntWarehouse(const float x, const float y)
