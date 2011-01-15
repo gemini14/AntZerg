@@ -13,7 +13,7 @@ function RemoveAnt(ID)
 end
 
 function RenderUpdateAllAnts()
-	for ID in ipairs(antIDTable) do
+	for ID, _ in pairs(antIDTable) do
 		local ant = factory:GetAntByID(ID)
 		renderer:UpdateAnt(ID, ant:GetX(), ant:GetY(), 0);
 	end

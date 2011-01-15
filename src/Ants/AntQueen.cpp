@@ -13,14 +13,17 @@ namespace AntZerg
 	{
 	}
 
-	void AntQueen::Eat()
+	int AntQueen::Eat()
 	{
 		if(GetFood() > 0)
 		{
 			DecreaseFoodStock();
 			numLarvaeProduced++;
 			numLarvaeAvailable++;
+			return 1;
 		}
+		
+		return 0;
 	}
 
 	void AntQueen::ExtractLarvae()

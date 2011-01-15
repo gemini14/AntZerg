@@ -4,8 +4,7 @@
 namespace AntZerg
 {
 	const int STARTING_FOOD = 50;
-	const int WITHDRAW_AMT = 1;
-
+	
 	AntWarehouse::AntWarehouse(const float x, const float y)
 		: storedFood(STARTING_FOOD), x(x), y(y)
 	{
@@ -49,12 +48,12 @@ namespace AntZerg
 			.def("WithdrawFood", &AntWarehouse::WithdrawFood);
 	}
 
-	int AntWarehouse::WithdrawFood()
+	int AntWarehouse::WithdrawFood(const int withdrawal)
 	{
-		if(storedFood)
+		if(storedFood >= withdrawal)
 		{
-			storedFood--;
-			return WITHDRAW_AMT;
+			storedFood -= withdrawal;
+			return withdrawal;
 		}
 		return 0;
 	}

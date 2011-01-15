@@ -16,6 +16,14 @@ namespace AntZerg
 	{
 	}
 
+	void Ant::AddFood(const int food)
+	{
+		if(food)
+		{
+			this->food += food;
+		}
+	}
+
 	bool Ant::CanMove() const
 	{
 		return movementEnabled;
@@ -54,11 +62,6 @@ namespace AntZerg
 		return position.Y;
 	}
 
-	void Ant::IncreaseFoodStock()
-	{
-		food++;
-	}
-
 	void Ant::PositionChange(const float delta_x, const float delta_y)
 	{
 		position.X += delta_x;
@@ -69,12 +72,13 @@ namespace AntZerg
 	{
 		using namespace luabind;
 		return class_<Ant>("Ant")
-				.def("CanMove", &Ant::CanMove)
-				.def("Eat", &Ant::Eat)
-				.def("GetFood", &Ant::GetFood)
-				.def("GetID", &Ant::GetID)
-				.def("GetX", &Ant::GetX)
-				.def("GetY", &Ant::GetY)
-				.def("PositionChange", &Ant::PositionChange);
+			.def("AddFood", &Ant::AddFood)
+			.def("CanMove", &Ant::CanMove)
+			.def("Eat", &Ant::Eat)
+			.def("GetFood", &Ant::GetFood)
+			.def("GetID", &Ant::GetID)
+			.def("GetX", &Ant::GetX)
+			.def("GetY", &Ant::GetY)
+			.def("PositionChange", &Ant::PositionChange);
 	}
 }

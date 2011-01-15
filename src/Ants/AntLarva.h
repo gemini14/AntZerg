@@ -24,7 +24,7 @@ namespace AntZerg
 			const std::string& actionScriptFile, const float x, const float y);
 		virtual ~AntLarva();
 		
-		virtual void Eat();
+		virtual int Eat();
 		static luabind::scope RegisterLua();
 		virtual void Run(const double dt);
 	};

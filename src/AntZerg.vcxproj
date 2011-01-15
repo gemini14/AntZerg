@@ -98,6 +98,7 @@
     <None Include="assets\art\antWarrior.png" />
     <None Include="assets\art\antWorker.png" />
     <None Include="assets\art\warehouse.png" />
+    <None Include="scripts\actions\behaviorTree.lua" />
     <None Include="scripts\actions\larva.lua" />
     <None Include="scripts\actions\nurse.lua" />
     <None Include="scripts\actions\queen.lua" />

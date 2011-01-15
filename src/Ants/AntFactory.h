@@ -28,6 +28,7 @@ namespace AntZerg
 		int numAntsAlive;
 		int numAntsDead;
 		int maxAntsAlive;
+		int queenID;
 
 		bool IsIDPresent(const int ID);
 
@@ -39,6 +40,7 @@ namespace AntZerg
 		int CreateAnt(const std::string& antType, const float x, const float y);
 		void CreateWarehouse(const float x, const float y);
 		Ant* GetAntByID(const int ID);
+		Ant* GetQueen();
 		AntWarehouse* GetWarehouse() const;
 		void RemoveAnt(const int ID);
 		void RunAll(const double dt);

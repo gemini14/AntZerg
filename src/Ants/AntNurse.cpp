@@ -13,12 +13,15 @@ namespace AntZerg
 	{
 	}
 
-	void AntNurse::Eat()
+	int AntNurse::Eat()
 	{
 		if(GetFood() > 0)
 		{
 			DecreaseFoodStock();
+			return 1;
 		}
+
+		return 0;
 	}
 
 	int AntNurse::GetTargetID() const
@@ -40,7 +43,8 @@ namespace AntZerg
 		using namespace luabind;
 		return class_<AntNurse, Ant>("AntNurse")
 			.def("IsCarryingLarva", &AntNurse::IsCarryingLarva)
-			.def("SetLarvaID_Carry", &AntNurse::SetLarvaID_Carry);
+			.def("SetLarvaID_Carry", &AntNurse::SetLarvaID_Carry)
+			.def("WithdrawFood", &AntNurse::WithdrawFood);
 	}
 
 	void AntNurse::Run(const double dt)
@@ -59,5 +63,25 @@ namespace AntZerg
 	void AntNurse::SetLarvaID_Carry(const int ID)
 	{
 		larvaID_carry = ID;
+	}
+
+	int AntNurse::WithdrawFood(const int amount)
+	{
+		if(amount > 0)
+		{
+			int withdrawnFood = 0;
+			while(withdrawnFood < amount)
+			{
+				int result = Eat();
+				if(!result)
+				{
+					break;
+				}
+				withdrawnFood++;
+			}
+			return withdrawnFood;
+		}
+
+		return 0;
 	}
 }

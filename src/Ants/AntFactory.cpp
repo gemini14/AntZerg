@@ -20,7 +20,7 @@ namespace AntZerg
 
 	AntFactory::AntFactory(std::shared_ptr<LuaManager> lua) 
 		: ID_counter(0), numAntsAlive(0), numAntsDead(0), maxAntsAlive(0), lua(lua),
-		warehouse(nullptr)
+		warehouse(nullptr), queenID(-1)
 	{
 		using namespace luabind;
 		module(lua->GetLuaState())
@@ -36,6 +36,7 @@ namespace AntZerg
 					.def("RemoveAnt", &AntFactory::RemoveAnt)
 					.def("CreateWarehouse", &AntFactory::CreateWarehouse)
 					.def("GetWarehouse", &AntFactory::GetWarehouse)
+					.def("GetQueen", &AntFactory::GetQueen)
 			];
 		luabind::globals(lua->GetLuaState())["factory"] = this;
 	}
@@ -54,7 +55,11 @@ namespace AntZerg
 
 		if(antType == "queen")
 		{
-			temp = new AntQueen(++ID_counter, lua, "scripts/conf/queenConf.lua", "scripts/actions/queen.lua", x, y);
+			if(queenID == -1)
+			{
+				temp = new AntQueen(++ID_counter, lua, "scripts/conf/queenConf.lua", "scripts/actions/queen.lua", x, y);
+				queenID = ID_counter;
+			}			
 		}
 		else if(antType == "larva")
 		{
@@ -103,6 +108,11 @@ namespace AntZerg
 		return nullptr;
 	}
 
+	Ant* AntFactory::GetQueen()
+	{
+		return GetAntByID(queenID);
+	}
+		
 	AntWarehouse* AntFactory::GetWarehouse() const
 	{
 		return warehouse;

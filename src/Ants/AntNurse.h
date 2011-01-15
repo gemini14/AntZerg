@@ -20,12 +20,13 @@ namespace AntZerg
 		const std::string& actionScriptFile, const float x, const float y);
 		virtual ~AntNurse();
 
-		virtual void Eat();
+		virtual int Eat();
 		int GetTargetID() const;
 		bool IsCarryingLarva() const;
 		static luabind::scope RegisterLua();
 		virtual void Run(const double dt);
 		void SetLarvaID_Carry(const int ID);
+		int WithdrawFood(const int amount);
 	};
 }
 

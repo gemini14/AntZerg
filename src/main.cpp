@@ -44,6 +44,7 @@ int main()
 	std::unique_ptr<AntFactory> factory((new AntFactory(luaMngr)));
 	std::unique_ptr<Renderer> renderer((new Renderer(app, luaMngr)));
 
+	luaMngr->LoadScript("scripts/actions/behaviorTree.lua");
 	luaMngr->LoadScript("scripts/antUtilities.lua");
 	luaMngr->LoadScript("scripts/conf/startup.lua");
 
@@ -61,17 +62,8 @@ int main()
 			double dt = currentTime - prevTime;
 			prevTime = currentTime;
 			dt /= 1000.;
-			/*static double collected_dt = 0;
-			if(collected_dt < 2)
-			{
-				collected_dt += dt;
-			}
-			else
-			{
-				collected_dt = dt;
-			}*/
-
-			factory->RunAll(/*collected_*/dt);			
+			
+			factory->RunAll(dt);			
 			luaMngr->CallFunction("RenderUpdateAllAnts");
 
 			app->driver->beginScene(true, true, video::SColor(255, 100, 101, 140));
