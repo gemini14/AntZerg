@@ -5,7 +5,7 @@ namespace AntZerg
 {
 	AntNurse::AntNurse(const int ID, std::shared_ptr<LuaManager> lua, const std::string& configFile, 
 		const std::string& actionScriptFile, const float x, const float y)
-		: Ant(ID, false, lua, configFile, actionScriptFile, x, y), babyID_carry(-1), targetID(-1)
+		: Ant(ID, false, lua, configFile, actionScriptFile, x, y), larvaID_carry(-1), targetID(-1)
 	{
 	}
 
@@ -13,13 +13,25 @@ namespace AntZerg
 	{
 	}
 
-	void AntNurse::Eat()
+	int AntNurse::Eat()
 	{
+		if(GetFood() > 0)
+		{
+			DecreaseFoodStock();
+			return 1;
+		}
+
+		return 0;
 	}
 
-	bool AntNurse::IsCarryingBaby() const
+	int AntNurse::GetTargetID() const
 	{
-		if(babyID_carry != -1)
+		return targetID;
+	}
+
+	bool AntNurse::IsCarryingLarva() const
+	{
+		if(larvaID_carry != -1)
 		{
 			return true;
 		}
@@ -30,8 +42,9 @@ namespace AntZerg
 	{
 		using namespace luabind;
 		return class_<AntNurse, Ant>("AntNurse")
-			.def("IsCarryingBaby", &AntNurse::IsCarryingBaby)
-			.def("SetBabyID_Carry", &AntNurse::SetBabyID_Carry);
+			.def("IsCarryingLarva", &AntNurse::IsCarryingLarva)
+			.def("SetLarvaID_Carry", &AntNurse::SetLarvaID_Carry)
+			.def("WithdrawFood", &AntNurse::WithdrawFood);
 	}
 
 	void AntNurse::Run(const double dt)
@@ -42,13 +55,33 @@ namespace AntZerg
 		}
 		catch (luabind::error& e)
 		{
-			std::string error = lua_tostring( lua->GetLuaState(), -1 );
+			std::string error = lua_tostring(lua->GetLuaState(), -1);
 			std::cout << "\n" << e.what() << "\n" << error << "\n";
 		}
 	}
 
-	void AntNurse::SetBabyID_Carry(const int ID)
+	void AntNurse::SetLarvaID_Carry(const int ID)
 	{
-		babyID_carry = ID;
+		larvaID_carry = ID;
+	}
+
+	int AntNurse::WithdrawFood(const int amount)
+	{
+		if(amount > 0)
+		{
+			int withdrawnFood = 0;
+			while(withdrawnFood < amount)
+			{
+				int result = Eat();
+				if(!result)
+				{
+					break;
+				}
+				withdrawnFood++;
+			}
+			return withdrawnFood;
+		}
+
+		return 0;
 	}
 }

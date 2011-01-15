@@ -166,5 +166,8 @@
     <None Include="scripts\conf\nurseConf.lua">
       <Filter>Source Files\Scripts\conf</Filter>
     </None>
+    <None Include="scripts\actions\behaviorTree.lua">
+      <Filter>Source Files\Scripts\actions</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -26,7 +26,7 @@ namespace AntZerg
 		float GetX() const;
 		float GetY() const;
 		static luabind::scope RegisterLua();
-		int WithdrawFood();
+		int WithdrawFood(const int withdrawal);
 	};
 }
 

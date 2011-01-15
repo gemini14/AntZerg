@@ -20,7 +20,7 @@ namespace AntZerg
 			const std::string& actionScriptFile, const float x, const float y);
 		virtual ~AntQueen();
 
-		virtual void Eat();
+		virtual int Eat();
 		void ExtractLarvae();
 		int GetMaxLarvaeProduced() const;
 		int GetNumAvailLarvae() const;

@@ -58,6 +58,8 @@ namespace AntZerg
 #ifdef _DEBUG
 			std::cout << "Error loading lua script.  Error code: " << result << std::endl;
 #endif
+			std::string error = lua_tostring(luaState, -1);
+			std::cout << "\n" << error << "\n";
 			return false;
 		}
 

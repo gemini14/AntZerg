@@ -11,7 +11,7 @@ namespace AntZerg
 	{
 	private:
 
-		int babyID_carry;
+		int larvaID_carry;
 		int targetID;
 
 	public:
@@ -20,11 +20,13 @@ namespace AntZerg
 		const std::string& actionScriptFile, const float x, const float y);
 		virtual ~AntNurse();
 
-		virtual void Eat();
-		bool IsCarryingBaby() const;
+		virtual int Eat();
+		int GetTargetID() const;
+		bool IsCarryingLarva() const;
 		static luabind::scope RegisterLua();
 		virtual void Run(const double dt);
-		void SetBabyID_Carry(const int ID);
+		void SetLarvaID_Carry(const int ID);
+		int WithdrawFood(const int amount);
 	};
 }
 

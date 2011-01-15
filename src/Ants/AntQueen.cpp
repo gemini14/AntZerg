@@ -13,14 +13,17 @@ namespace AntZerg
 	{
 	}
 
-	void AntQueen::Eat()
+	int AntQueen::Eat()
 	{
 		if(GetFood() > 0)
 		{
 			DecreaseFoodStock();
 			numLarvaeProduced++;
 			numLarvaeAvailable++;
+			return 1;
 		}
+		
+		return 0;
 	}
 
 	void AntQueen::ExtractLarvae()
@@ -59,7 +62,7 @@ namespace AntZerg
 		}
 		catch (luabind::error& e)
 		{
-			std::string error = lua_tostring( lua->GetLuaState(), -1 );
+			std::string error = lua_tostring(lua->GetLuaState(), -1);
 			std::cout << "\n" << e.what() << "\n" << error << "\n";
 		}
 	}

@@ -14,21 +14,27 @@ namespace AntZerg
 	{
 	}
 
-	void AntLarva::Eat()
+	int AntLarva::Eat()
 	{
-		DecreaseFoodStock();
-		numTimesFoodEaten++;
-		if(numTimesFoodEaten == maxFoodBeforeMorph)
+		if(GetFood() > 0)
 		{
-			morph = true;
+			DecreaseFoodStock();
+			numTimesFoodEaten++;
+			if(numTimesFoodEaten == maxFoodBeforeMorph)
+			{
+				morph = true;
+			}
+			return 1;
 		}
+
+		return 0;
 	}	
 
 	luabind::scope AntLarva::RegisterLua()
 	{
 		using namespace luabind;
 		return class_<AntLarva, Ant>("AntLarva")
-				.def("Eat", &AntLarva::Eat);
+			.def("Eat", &AntLarva::Eat);
 	}
 
 	void AntLarva::Run(const double dt)
@@ -39,7 +45,7 @@ namespace AntZerg
 		}
 		catch (luabind::error& e)
 		{
-			std::string error = lua_tostring( lua->GetLuaState(), -1 );
+			std::string error = lua_tostring(lua->GetLuaState(), -1);
 			std::cout << "\n" << e.what() << "\n" << error << "\n";
 		}
 	}
