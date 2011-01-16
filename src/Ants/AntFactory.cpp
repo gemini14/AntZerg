@@ -1,6 +1,8 @@
 #include "AntFactory.h"
 
 
+#include <algorithm>
+
 #include <boost/foreach.hpp>
 #include <luabind/iterator_policy.hpp>
 
@@ -37,6 +39,7 @@ namespace AntZerg
 					.def("CreateWarehouse", &AntFactory::CreateWarehouse)
 					.def("GetWarehouse", &AntFactory::GetWarehouse)
 					.def("GetQueen", &AntFactory::GetQueen)
+					.def("LarvaNeedsFood", &AntFactory::LarvaNeedsFood)
 			];
 		luabind::globals(lua->GetLuaState())["factory"] = this;
 	}
@@ -64,6 +67,7 @@ namespace AntZerg
 		else if(antType == "larva")
 		{
 			temp = new AntLarva(++ID_counter, lua, "scripts/conf/larvaConf.lua", "scripts/actions/larva.lua", x, y);
+			larvaList.push_back(ID_counter);
 		}
 		else if(antType == "worker")
 		{
@@ -118,6 +122,20 @@ namespace AntZerg
 		return warehouse;
 	}
 
+	int AntFactory::LarvaNeedsFood()
+	{
+		for(auto iter = larvaList.begin(); iter != larvaList.end(); ++iter)
+		{
+			auto ant = GetAntByID((*iter));
+			if(ant->GetFood() < 10)
+			{
+				return (*iter);
+			}
+		}
+
+		return -1;
+	}
+
 	void AntFactory::RemoveAnt(const int ID)
 	{
 		if(IsIDPresent(ID))
@@ -125,6 +143,12 @@ namespace AntZerg
 			antLookupTable.erase(ID);
 			numAntsDead++;
 			numAntsAlive--;
+
+			auto iter = std::find(larvaList.begin(), larvaList.end(), ID);
+			if(iter != larvaList.end())
+			{
+				larvaList.erase(iter);
+			}
 		}
 	}
 
