@@ -11,7 +11,7 @@ namespace AntZerg
 	{
 	private:
 
-		int larvaID_carry;
+		bool larva_carry;
 		int targetID;
 
 	public:
@@ -25,7 +25,7 @@ namespace AntZerg
 		bool IsCarryingLarva() const;
 		static luabind::scope RegisterLua();
 		virtual void Run(const double dt);
-		void SetLarvaID_Carry(const int ID);
+		void SetLarvaCarry(const bool carrying);
 		int WithdrawFood(const int amount);
 	};
 }

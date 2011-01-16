@@ -3,6 +3,7 @@
 
 
 #include <memory>
+#include <list>
 #include <string>
 #include <unordered_map>
 
@@ -23,6 +24,7 @@ namespace AntZerg
 		AntHash antLookupTable;
 		std::shared_ptr<LuaManager> lua;
 		AntWarehouse *warehouse;
+		std::list<int> larvaList;
 
 		int ID_counter;
 		int numAntsAlive;
@@ -42,6 +44,7 @@ namespace AntZerg
 		Ant* GetAntByID(const int ID);
 		Ant* GetQueen();
 		AntWarehouse* GetWarehouse() const;
+		int LarvaNeedsFood();
 		void RemoveAnt(const int ID);
 		void RunAll(const double dt);
 	};
