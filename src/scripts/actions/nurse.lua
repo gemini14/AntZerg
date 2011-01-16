@@ -16,61 +16,6 @@ Eat
 --reuse getFood_Condition, getWarehouse_Action, moveToTarget_Action, retrieveFood_Action
 --end Get food objective--
 
---Deliver food to queen objective--
-
-local deliverFoodQueen_Condition = Condition:new()
-
-function deliverFoodQueen_Condition:conditionMet(ant, blackboard)
-	--if ant:GetFood() > 10 then
-		--print("In deliver condition, current action is: "..blackboard.curAction)
-		--print("Queen food: "..factory:GetQueen():GetFood())
-	--end
-	return ant:GetFood() > 10 and factory:GetQueen():GetFood() < 10 and blackboard.curAction == 0
-end
-
-local deliverFoodQueen_c = deliverFoodQueen_Condition:new()
-
-
-local getQueen_Action = Action:new()
-
-function getQueen_Action:running(ant, blackboard)
-	return false
-end
-
-function getQueen_Action:run(ant, blackboard)
-	local queen = factory:GetQueen()
-	--print("Setting queen as target x: "..queen:GetX().." y: "..queen:GetY())
-	blackboard.target.x = queen:GetX()
-	blackboard.target.y = queen:GetY()
-	blackboard.target.ID = queen:GetID()
-end
-
-local getQueen_a = getQueen_Action:new()
-
-
---reuse the moveToTarget_Action action
-
-
-local deliverFoodAnt_Action = Action:new()
-
-function deliverFoodAnt_Action:running(ant, blackboard)
-	return false
-end
-
-function deliverFoodAnt_Action:run(ant, blackboard)
-	print("Target has "..factory:GetAntByID(blackboard.target.ID):GetFood().." food")
-	print("Ant has "..ant:GetFood())
-	local withdrawnFood = ant:WithdrawFood(10)
-	print("Ant has "..ant:GetFood().." and removed "..withdrawnFood.." food")
-	factory:GetAntByID(blackboard.target.ID):AddFood(withdrawnFood)
-	--factory:GetQueen():AddFood(withdrawnFood)
-	print("Delivered "..withdrawnFood.." food to target")
-end
-
-local deliverFoodAnt_a = deliverFoodAnt_Action:new()
-
---End deliver food to queen objective--
-
 
 --Extract larva objective--
 
@@ -139,7 +84,7 @@ function getNewLarvaLoc_Action:run(ant, blackboard)
 	
 	blackboard.target.x = x
 	blackboard.target.y = y
-	print("new larva being placed at "..x.." "..y)
+	--print("new larva being placed at "..x.." "..y)
 end
 
 local getNewLarvaLoc_a = getNewLarvaLoc_Action:new()
@@ -219,7 +164,7 @@ end
 
 function eat_Action:run(ant, blackboard)
 	ant:Eat()
-	print("Nurse just ate")
+	--print("Nurse just ate")
 	blackboard.delta_sum = 0
 end
 
@@ -230,13 +175,12 @@ local eat_a = eat_Action:new()
 
 --Actual nurse ant behavior tree--
 local GetFood = { condition = getFood_c, actions = { getWarehouse_a, moveToTarget_a, retrieveFood_a } } 
-local DeliverFoodQueen = { condition = deliverFoodQueen_c, actions = { getQueen_a, moveToTarget_a, deliverFoodAnt_a } }
 local ExtractLarva = { condition = extractLarva_c, actions = { getQueen_a, moveToTarget_a, extractLarva_a } }
 local PlaceLarva = { condition = placeLarva_c, actions = { getNewLarvaLoc_a, moveToTarget_a, placeLarva_a } }
 local DeliverFoodLarva = { condition = deliverFoodLarva_c, actions = { getLarva_a, moveToTarget_a, deliverFoodAnt_a } }
 local Eat = { condition = eat_c, actions = { eat_a } }
 
-local NurseBT = { GetFood, DeliverFoodQueen, ExtractLarva, PlaceLarva, Eat }
+local NurseBT = { Eat, DeliverFoodLarva, GetFood, ExtractLarva, PlaceLarva }
 
 
 --blackboard tables for individual ants (or nurses, rather)
@@ -245,19 +189,18 @@ local nurseBB = {}
 
 function NurseRun(ID, dt)
 	if nurseBB.ID == nil then
-		nurseBB.ID = { actions = {}, curAction = 0, target = {x = nil, y = nil, ID = -1}, delta_sum = 0, movement_speed = 0.4 }
+		nurseBB.ID = { actions = {}, curAction = 0, target = {x = nil, y = nil, ID = -1}, 
+			delta_sum = 0, movement_speed = 0.5 }
 	end
 
 	local ant = factory:GetAntByID(ID)
 	
 	if nurseBB.ID.curAction == 0 then
-		--print("NurseBT size: "..#NurseBT)
 		for key, val in pairs(NurseBT) do
 			local behavior = NurseBT[key]
 			local result = behavior.condition:conditionMet(ant, nurseBB.ID)
 			if result then
-				print("Nurse: Behavior chosen: "..key)
-				--print("condition met--table key: "..key.." currentAction: "..nurseBB.ID.curAction)
+				--print("Nurse: Behavior chosen: "..key)
 				nurseBB.ID.actions = behavior.actions
 				nurseBB.ID.curAction = 1
 				break;

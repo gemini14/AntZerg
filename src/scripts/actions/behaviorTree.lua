@@ -134,3 +134,45 @@ end
 getWarehouse_a = getWarehouse_Action:new()
 
 --end Get warehouse target action--
+
+
+--getQueen_Action--
+
+getQueen_Action = Action:new()
+
+function getQueen_Action:running(ant, blackboard)
+	return false
+end
+
+function getQueen_Action:run(ant, blackboard)
+	local queen = factory:GetQueen()
+	--print("Setting queen as target x: "..queen:GetX().." y: "..queen:GetY())
+	blackboard.target.x = queen:GetX()
+	blackboard.target.y = queen:GetY()
+	blackboard.target.ID = queen:GetID()
+end
+
+getQueen_a = getQueen_Action:new()
+
+--end getQueen_Action--
+
+
+--Deliver food ant action--
+deliverFoodAnt_Action = Action:new()
+
+function deliverFoodAnt_Action:running(ant, blackboard)
+	return false
+end
+
+function deliverFoodAnt_Action:run(ant, blackboard)
+	print("Target has "..factory:GetAntByID(blackboard.target.ID):GetFood().." food")
+	print("Ant has "..ant:GetFood())
+	local withdrawnFood = ant:WithdrawFood(10)
+	print("Ant has "..ant:GetFood().." and removed "..withdrawnFood.." food")
+	factory:GetAntByID(blackboard.target.ID):AddFood(withdrawnFood)
+	--factory:GetQueen():AddFood(withdrawnFood)
+	print("Delivered "..withdrawnFood.." food to target")
+end
+
+deliverFoodAnt_a = deliverFoodAnt_Action:new()
+--end deliver food ant action--

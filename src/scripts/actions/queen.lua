@@ -28,7 +28,7 @@ end
 
 function eat_Action:run(ant, blackboard)
 	ant:Eat()
-	print("Queen just ate.  Delta sum: "..blackboard.delta_sum)
+	--print("Queen just ate.  Delta sum: "..blackboard.delta_sum)
 	blackboard.delta_sum = 0
 end
 
@@ -54,13 +54,15 @@ function createLarva_Action:running(ant, blackboard)
 end
 
 function createLarva_Action:run(ant, blackboard)
-	print("Queen created larva.  Larva sum: "..blackboard.larva_sum)
+	--print("Queen created larva.  Larva sum: "..blackboard.larva_sum)
 	ant:CreateLarva()
 	blackboard.larva_sum = 0
 end
 
 local createLarva_a = createLarva_Action:new()
 --end Create larva--
+
+
 
 --------
 
@@ -86,7 +88,7 @@ function QueenRun(ID, dt)
 			local behavior = QueenBT[key]
 			local result = behavior.condition:conditionMet(ant, queenBB.ID)
 			if result then
-				print("Queen: Behavior chosen: "..key)
+				--print("Queen: Behavior chosen: "..key)
 				--print("condition met--table key: "..key.." currentAction: "..nurseBB.ID.curAction)
 				queenBB.ID.actions = behavior.actions
 				queenBB.ID.curAction = 1
@@ -115,15 +117,3 @@ function QueenRun(ID, dt)
 	queenBB.ID.delta_sum = queenBB.ID.delta_sum + dt
 	queenBB.ID.larva_sum = queenBB.ID.larva_sum + dt
 end
-
---[[
-if delta < 2 then
-	delta = delta + dt
-else
-	--over 2 secs
-	local ant = factory:GetAntByID(ID)
-	ant:Eat()
-	--print("Queen just ran. Food: "..ant:GetFood().." Larvae: "..ant:GetNumAvailLarvae())
-	delta = 0
-end
---]]

@@ -23,7 +23,7 @@ THE SOFTWARE.
 Description: AntZerg is a small C++/Lua simulation using swarm intelligence & behavior trees to model
 an ant colony.
 */
-
+#include <vld.h>
 #include <memory>
 
 #include <irrlicht.h>

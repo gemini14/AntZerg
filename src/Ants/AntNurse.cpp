@@ -5,7 +5,7 @@ namespace AntZerg
 {
 	AntNurse::AntNurse(const int ID, std::shared_ptr<LuaManager> lua, const std::string& configFile, 
 		const std::string& actionScriptFile, const float x, const float y)
-		: Ant(ID, false, lua, configFile, actionScriptFile, x, y), larva_carry(false), targetID(-1)
+		: Ant(ID, true, lua, configFile, actionScriptFile, x, y), larva_carry(false), targetID(-1)
 	{
 	}
 
