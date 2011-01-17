@@ -5,6 +5,7 @@ function AddAnt(type, x, y)
 	if id ~= -1 then
 		table.insert(antIDTable, id)
 		renderer:AddAnt(id, type, x, y)
+		return id
 	end
 end
 
@@ -12,19 +13,12 @@ function RemoveAnt(ID)
 	if ID ~= nil then
 		factory:RemoveAnt(ID)
 		renderer:RemoveAnt(ID)
-		for ID, val in pairs(antIDTable) do
-			print(val)
-		end
-		--table.remove(antIDTable, ID)
 		for key, val in pairs(antIDTable) do
 			if val == ID then
-				print("Removing key "..key.." and ID "..val)
+				--print("Removing key "..key.." and ID "..val)
 				table.remove(antIDTable, key)
 				break
 			end
-		end
-		for ID, val in pairs(antIDTable) do
-			print(val)
 		end
 	end
 end
@@ -34,10 +28,6 @@ function RenderUpdateAllAnts()
 		local ant = factory:GetAntByID(ID)
 		if ant ~= nil then
 			renderer:UpdateAnt(ID, ant:GetX(), ant:GetY())
-		else
-			for key, ID in pairs(antIDTable) do
-				print("Oops..key "..key.." ID "..ID)
-			end
 		end
 	end
 end

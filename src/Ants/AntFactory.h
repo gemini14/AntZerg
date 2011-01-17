@@ -51,7 +51,7 @@ namespace AntZerg
 		FungusPlot* GetPlotByID(const int ID);
 		Ant* GetQueen();
 		AntWarehouse* GetWarehouse() const;
-		int LarvaNeedsFood();
+		int LarvaNeedsFood(const int nurseID);
 		void RemoveAnt(const int ID);
 		void RemoveFungusPlot(const int ID);
 		void RunAll(const double dt);

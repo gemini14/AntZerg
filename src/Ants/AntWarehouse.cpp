@@ -55,6 +55,10 @@ namespace AntZerg
 			storedFood -= withdrawal;
 			return withdrawal;
 		}
-		return 0;
+
+		// not enough to fill amount, so take all remaining food (set to 0) and return any food removed
+		int temp = storedFood;
+		storedFood = 0;
+		return temp;
 	}
 }

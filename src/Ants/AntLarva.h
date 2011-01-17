@@ -16,6 +16,7 @@ namespace AntZerg
 
 		int maxFoodBeforeMorph;
 		bool morph;
+		int nurse;
 		
 	public:
 
@@ -26,8 +27,11 @@ namespace AntZerg
 		bool CanMorph() const;
 		virtual int Eat();
 		int GetMorphFoodLimit() const;
+		int GetNumTimesEaten() const;
+		int GetNurse() const;
 		static luabind::scope RegisterLua();
 		virtual void Run(const double dt);
+		void SetNurse(const int nurseID);
 	};
 
 }

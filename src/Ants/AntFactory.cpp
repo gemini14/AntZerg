@@ -161,7 +161,7 @@ namespace AntZerg
 		return warehouse;
 	}
 
-	int AntFactory::LarvaNeedsFood()
+	int AntFactory::LarvaNeedsFood(const int nurseID)
 	{
 		if(larvaList.size() == 0)
 		{
@@ -170,10 +170,13 @@ namespace AntZerg
 
 		for(auto iter = larvaList.begin(); iter != larvaList.end(); ++iter)
 		{
-			auto ant = GetAntByID((*iter));
-			if(ant->GetFood() < dynamic_cast<AntLarva*>(ant)->GetMorphFoodLimit())
+			auto ant = dynamic_cast<AntLarva*>(GetAntByID((*iter)));
+			if(ant->GetNurse() == nurseID)
 			{
-				return (*iter);
+				if(ant->GetFood() + ant->GetNumTimesEaten() < ant->GetMorphFoodLimit())
+				{
+					return (*iter);
+				}
 			}
 		}
 

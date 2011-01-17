@@ -25,7 +25,7 @@ end
 
 function eat_Action:run(ant, blackboard)
 	ant:Eat()
-	print("Larva just ate.  Delta sum: "..blackboard.delta_sum)
+	--print("Larva just ate.  Delta sum: "..blackboard.delta_sum)
 	blackboard.delta_sum = 0
 end
 
@@ -56,7 +56,7 @@ function morph_Action:run(ant, blackboard)
 	math.random()
 
 	local morphTarget = math.random(1, 2)
-	print("Morph randomizer gave "..morphTarget)
+	--print("Morph randomizer gave "..morphTarget)
 	if morphTarget == 1 then
 		AddAnt("worker", ant:GetX(), ant:GetY())
 	elseif morphTarget == 2 then
@@ -82,46 +82,46 @@ local larvaBB = {}
 
 
 function LarvaRun(ID, dt)
-	if larvaBB.ID == nil then
-		larvaBB.ID = { actions = {}, curAction = 0, delta_sum = 0, larva_sum = 0, dead = false }
+	if larvaBB[ID] == nil then
+		larvaBB[ID] = { actions = {}, curAction = 0, delta_sum = 0, larva_sum = 0, dead = false }
 	end
 
 	local ant = factory:GetAntByID(ID)
 
-	if larvaBB.ID.curAction == 0 then
+	if larvaBB[ID].curAction == 0 then
 		for key, val in pairs(LarvaBT) do
 			local behavior = LarvaBT[key]
-			local result = behavior.condition:conditionMet(ant, larvaBB.ID)
+			local result = behavior.condition:conditionMet(ant, larvaBB[ID])
 			if result then
-				print("Larva: Behavior chosen: "..key)
-				larvaBB.ID.actions = behavior.actions
-				larvaBB.ID.curAction = 1
+				--print("Larva: Behavior chosen: "..key)
+				larvaBB[ID].actions = behavior.actions
+				larvaBB[ID].curAction = 1
 				break;
 			end
 		end		
 	end
 
-	local curAction = larvaBB.ID.curAction
+	local curAction = larvaBB[ID].curAction
 	--run the current action
-	if curAction ~= 0 and larvaBB.ID.actions ~= nil then
-		larvaBB.ID.actions[curAction]:run(ant, larvaBB.ID, dt)
+	if curAction ~= 0 and larvaBB[ID].actions ~= nil then
+		larvaBB[ID].actions[curAction]:run(ant, larvaBB[ID], dt)
 	
 		--see if it's done and update current action and actions tree for ant
-		local status = larvaBB.ID.actions[curAction]:running(ant, larvaBB.ID)
+		local status = larvaBB[ID].actions[curAction]:running(ant, larvaBB[ID])
 		if status == false then
-			if larvaBB.ID.actions[curAction + 1] ~= nil then
-				larvaBB.ID.curAction = curAction + 1
+			if larvaBB[ID].actions[curAction + 1] ~= nil then
+				larvaBB[ID].curAction = curAction + 1
 			else
-				larvaBB.ID.actions = nil
-				larvaBB.ID.curAction = 0
+				larvaBB[ID].actions = nil
+				larvaBB[ID].curAction = 0
 			end
 		end
 	end
 
-	larvaBB.ID.delta_sum = larvaBB.ID.delta_sum + dt
+	larvaBB[ID].delta_sum = larvaBB[ID].delta_sum + dt
 
-	if larvaBB.ID.dead then
+	if larvaBB[ID].dead then
 		RemoveAnt(ID)
-		larvaBB.ID = nil
+		larvaBB[ID] = nil
 	end
 end

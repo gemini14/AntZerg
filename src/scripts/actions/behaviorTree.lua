@@ -41,16 +41,22 @@ end
 retrieveFood_Action = Action:new()
 
 function retrieveFood_Action:running(ant, blackboard)
-	return false
+	local running
+	if ant:GetFood() ~= 0 then
+		running = false
+	else
+		running = true
+	end
+	return running
 end
 
 function retrieveFood_Action:run(ant, blackboard)
 	local warehouse = factory:GetWarehouse()
 	--remove 25 food by default, less is taken out if there isn't enough
 	local withdraw = warehouse:WithdrawFood(25)
-	--print("Nurse withdrew "..withdraw.." food from the warehouse.")
+	--print("Withdrew "..withdraw.." food from the warehouse.")
 	ant:AddFood(withdraw)
-	--print("Nurse has "..ant:GetFood().." food")
+	--print("Ant has "..ant:GetFood().." food")
 end
 
 retrieveFood_a = retrieveFood_Action:new()
@@ -100,21 +106,6 @@ moveToTarget_a = moveToTarget_Action:new()
 --end Move to target action--
 
 
---Get food condition--
-getFood_Condition = Condition:new()
-
-function getFood_Condition:conditionMet(ant, blackboard)
-	--nurse will get food if she has less than 10 food, unless there's another current action
-	--print("in getfood condition: cur food: "..ant:GetFood().." time delta: "..blackboard.delta_sum)
-	return ant:GetFood() <= 10 and blackboard.curAction == 0
-end
-
---get food condition obj
-getFood_c = getFood_Condition:new()
-
---end Get food condition--
-
-
 --Get warehouse target action--
 getWarehouse_Action = Action:new()
 
@@ -125,7 +116,7 @@ end
 
 function getWarehouse_Action:run(ant, blackboard)
 	local warehouse = factory:GetWarehouse()
-	--print("Setting warehouse as target x: "..warehouse:GetX().." y: "..warehouse:GetY())
+	print("Setting warehouse as target x: "..warehouse:GetX().." y: "..warehouse:GetY().." ID: "..ant:GetID())
 	blackboard.target.x = warehouse:GetX()
 	blackboard.target.y = warehouse:GetY()
 end
@@ -146,7 +137,7 @@ end
 
 function getQueen_Action:run(ant, blackboard)
 	local queen = factory:GetQueen()
-	--print("Setting queen as target x: "..queen:GetX().." y: "..queen:GetY())
+	print("Setting queen as target x: "..queen:GetX().." y: "..queen:GetY().." ID: "..ant:GetID())
 	blackboard.target.x = queen:GetX()
 	blackboard.target.y = queen:GetY()
 	blackboard.target.ID = queen:GetID()
@@ -165,13 +156,16 @@ function deliverFoodAnt_Action:running(ant, blackboard)
 end
 
 function deliverFoodAnt_Action:run(ant, blackboard)
-	print("Target has "..factory:GetAntByID(blackboard.target.ID):GetFood().." food")
-	print("Ant has "..ant:GetFood())
-	local withdrawnFood = ant:WithdrawFood(10)
-	print("Ant has "..ant:GetFood().." and removed "..withdrawnFood.." food")
-	factory:GetAntByID(blackboard.target.ID):AddFood(withdrawnFood)
-	--factory:GetQueen():AddFood(withdrawnFood)
-	print("Delivered "..withdrawnFood.." food to target")
+	if factory:GetAntByID(blackboard.target.ID) ~= nil then
+		--print("Target still exists!")
+		--print("Target has "..factory:GetAntByID(blackboard.target.ID):GetFood().." food")
+		--print("Ant has "..ant:GetFood())
+		local withdrawnFood = ant:WithdrawFood(10)
+		--print("Ant has "..ant:GetFood().." and removed "..withdrawnFood.." food")
+		factory:GetAntByID(blackboard.target.ID):AddFood(withdrawnFood)
+		--factory:GetQueen():AddFood(withdrawnFood)
+		--print("Delivered "..withdrawnFood.." food to target")
+	end
 end
 
 deliverFoodAnt_a = deliverFoodAnt_Action:new()

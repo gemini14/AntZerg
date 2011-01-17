@@ -41,7 +41,7 @@ namespace AntZerg
 			const std::string& actionScriptFile, const float x, const float y);
 		virtual ~Ant();
 
-		void AddFood(const int food);
+		void AddFood(const int foodIncome);
 		bool CanMove() const;
 		void DecreaseFoodStock();
 		virtual int Eat() = 0;
