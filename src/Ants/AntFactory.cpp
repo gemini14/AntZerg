@@ -2,6 +2,7 @@
 
 
 #include <algorithm>
+#include <cmath>
 
 #include <boost/foreach.hpp>
 #include <luabind/iterator_policy.hpp>
@@ -73,8 +74,36 @@ namespace AntZerg
 		}
 		else if(antType == "larva")
 		{
-			temp = new AntLarva(++antID_counter, lua, "scripts/conf/larvaConf.lua", "scripts/actions/larva.lua", x, y);
-			larvaList.push_back(antID_counter);
+			auto farmPosCheck = [=]() -> bool
+			{
+				const float epsilon = 0.01f;
+				for(auto iter = fungusPlots.begin(); iter != fungusPlots.end(); ++iter)
+				{
+					if(std::abs(iter->second->GetX() - x ) < epsilon && std::abs(iter->second->GetY() - y) < epsilon)
+					{
+						return false;
+					}
+				}
+				return true;
+			};
+			auto larvaPosCheck = [=]() -> bool
+			{
+				const float epsilon = 0.01f;
+				for(auto iter = larvaList.begin(); iter != larvaList.end(); ++iter)
+				{
+					auto ant = GetAntByID(*iter);
+					if(std::abs(ant->GetX() - x) < epsilon && std::abs(ant->GetY() - y) < epsilon)
+					{
+						return false;
+					}
+				}
+				return true;
+			};
+			if(farmPosCheck() && larvaPosCheck())
+			{
+				temp = new AntLarva(++antID_counter, lua, "scripts/conf/larvaConf.lua", "scripts/actions/larva.lua", x, y);
+				larvaList.push_back(antID_counter);
+			}
 		}
 		else if(antType == "worker")
 		{

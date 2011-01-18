@@ -126,7 +126,7 @@ namespace AntZerg
 			];
 		luabind::globals(lua->GetLuaState())["renderer"] = this;
 
-		app->smgr->addCameraSceneNode(0, core::vector3df(0,20,-5), core::vector3df(0,0,0));
+		app->smgr->addCameraSceneNode(0, core::vector3df(0,25,0), core::vector3df(0,0,0));
 	}
 
 	Renderer::~Renderer()

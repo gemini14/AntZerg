@@ -6,6 +6,8 @@ function AddAnt(type, x, y)
 		table.insert(antIDTable, id)
 		renderer:AddAnt(id, type, x, y)
 		return id
+	else
+		return -1
 	end
 end
 

@@ -112,8 +112,10 @@ end
 
 function placeLarva_Action:run(ant, blackboard)
 	local id = AddAnt("larva", blackboard.target.x, blackboard.target.y)
-	factory:GetAntByID(id):SetNurse(ant:GetID())
-	ant:SetLarvaCarry(false)
+	if id ~= -1 then
+		factory:GetAntByID(id):SetNurse(ant:GetID())
+		ant:SetLarvaCarry(false)
+	end
 end
 
 local placeLarva_a = placeLarva_Action:new()
