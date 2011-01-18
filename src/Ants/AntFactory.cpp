@@ -84,9 +84,6 @@ namespace AntZerg
 		{
 			temp = new AntNurse(++antID_counter, lua, "scripts/conf/nurseConf.lua", "scripts/actions/nurse.lua", x, y);
 		}
-		else if(antType == "warrior")
-		{
-		}
 		else
 		{
 			temp = nullptr;

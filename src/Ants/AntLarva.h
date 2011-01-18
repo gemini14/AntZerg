@@ -24,14 +24,14 @@ namespace AntZerg
 			const std::string& actionScriptFile, const float x, const float y);
 		virtual ~AntLarva();
 		
-		bool CanMorph() const;
+		inline bool CanMorph() const;
 		virtual int Eat();
 		int GetMorphFoodLimit() const;
 		int GetNumTimesEaten() const;
 		int GetNurse() const;
 		static luabind::scope RegisterLua();
 		virtual void Run(const double dt);
-		void SetNurse(const int nurseID);
+		inline void SetNurse(const int nurseID);
 	};
 
 }

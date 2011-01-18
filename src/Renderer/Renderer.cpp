@@ -180,7 +180,7 @@ namespace AntZerg
 
 			float scale = antDisplayInfoTable[antType]->GetDisplayScale();
 			antLookupTable[ID] = new AntInfo(antType, x, y,  
-				app->smgr->addSphereSceneNode(0.5f, 16, 0, -1, core::vector3df(x, 0, y), core::vector3df(0,0,0),
+				app->smgr->addSphereSceneNode(0.5f, 8, 0, -1, core::vector3df(x, 0, y), core::vector3df(0,0,0),
 				core::vector3df(scale, scale, scale)));
 			antLookupTable[ID]->node->setMaterialTexture(0, antDisplayInfoTable[antType]->GetTexture());
 			antLookupTable[ID]->node->setMaterialFlag(video::EMF_LIGHTING, false);
@@ -195,7 +195,7 @@ namespace AntZerg
 		if(ID != -1 && (plotTable.find(ID) == plotTable.end()))
 		{
 			plotTable[ID] = new FungusPlotInfo(x, y, 
-				app->smgr->addSphereSceneNode(0.5f, 16, 0, -1, core::vector3df(x, 0, y)));
+				app->smgr->addSphereSceneNode(0.5f, 8, 0, -1, core::vector3df(x, 0, y)));
 			plotTable[ID]->node->setMaterialTexture(0, fungusPlotTexture);
 			plotTable[ID]->node->setMaterialFlag(video::EMF_LIGHTING, false);
 		}
@@ -208,7 +208,7 @@ namespace AntZerg
 
 		if(!warehouseNode)
 		{
-			warehouseNode = app->smgr->addSphereSceneNode(0.5f, 16, 0, -1, core::vector3df(x, 0, y));
+			warehouseNode = app->smgr->addSphereSceneNode(0.5f, 8, 0, -1, core::vector3df(x, 0, y));
 			
 			auto table = lua->GetObject("SupportTextures");
 			assert(table.is_valid() && type(table) == LUA_TTABLE);

@@ -48,6 +48,7 @@
       <AdditionalDependencies>Irrlicht.lib;lua5.1.lib;luabind-0.9.1_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
+      <Profile>true</Profile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -56,6 +57,11 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <PreprocessorDefinitions>NDEBUG;_NDEBUG;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -99,8 +105,8 @@
     <None Include="assets\art\antLarva.png" />
     <None Include="assets\art\antNurse.png" />
     <None Include="assets\art\antQueen.png" />
-    <None Include="assets\art\antWarrior.png" />
     <None Include="assets\art\antWorker.png" />
+    <None Include="assets\art\fungus.png" />
     <None Include="assets\art\warehouse.png" />
     <None Include="scripts\actions\behaviorTree.lua" />
     <None Include="scripts\actions\larva.lua" />

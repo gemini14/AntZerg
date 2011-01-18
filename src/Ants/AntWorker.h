@@ -11,8 +11,6 @@ namespace AntZerg
 	{
 	private:
 
-
-
 	public:
 
 		AntWorker(const int ID, std::shared_ptr<LuaManager> lua, const std::string& configFile,
@@ -22,7 +20,7 @@ namespace AntZerg
 		virtual int Eat();
 		static luabind::scope RegisterLua();
 		virtual void Run(const double dt);
-		int WithdrawFood(const int amount);
+		inline int WithdrawFood(const int amount);
 	};
 }
 

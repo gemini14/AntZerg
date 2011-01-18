@@ -11,7 +11,7 @@ local eat_Condition = Condition:new()
 
 function eat_Condition:conditionMet(ant, blackboard)
 	--larva eats every 4 seconds
-	return ant:GetFood() > 0  and blackboard.delta_sum >= 4 and blackboard.curAction == 0
+	return ant:GetFood() > 0  and blackboard.delta_sum >= 4
 end
 
 local eat_c = eat_Condition:new()
@@ -25,7 +25,6 @@ end
 
 function eat_Action:run(ant, blackboard)
 	ant:Eat()
-	--print("Larva just ate.  Delta sum: "..blackboard.delta_sum)
 	blackboard.delta_sum = 0
 end
 
@@ -38,7 +37,7 @@ local eat_a = eat_Action:new()
 local morph_Condition = Condition:new()
 
 function morph_Condition:conditionMet(ant, blackboard)
-	return ant:CanMorph() and blackboard.curAction == 0
+	return ant:CanMorph()
 end
 
 local morph_c = morph_Condition:new()
@@ -55,11 +54,10 @@ function morph_Action:run(ant, blackboard)
 	math.randomseed(seed)
 	math.random()
 
-	local morphTarget = math.random(1, 2)
-	--print("Morph randomizer gave "..morphTarget)
-	if morphTarget == 1 then
+	local morphTarget = math.random()
+	if morphTarget >= 0 and morphTarget < 0.4 then
 		AddAnt("worker", ant:GetX(), ant:GetY())
-	elseif morphTarget == 2 then
+	elseif morphTarget >= 0.4 and morphTarget <= 1 then
 		AddAnt("nurse", ant:GetX(), ant:GetY())
 	end
 
@@ -93,7 +91,6 @@ function LarvaRun(ID, dt)
 			local behavior = LarvaBT[key]
 			local result = behavior.condition:conditionMet(ant, larvaBB[ID])
 			if result then
-				--print("Larva: Behavior chosen: "..key)
 				larvaBB[ID].actions = behavior.actions
 				larvaBB[ID].curAction = 1
 				break;

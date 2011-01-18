@@ -166,9 +166,6 @@
     <None Include="assets\art\antQueen.png">
       <Filter>Resource Files\AntTextures</Filter>
     </None>
-    <None Include="assets\art\antWarrior.png">
-      <Filter>Resource Files\AntTextures</Filter>
-    </None>
     <None Include="assets\art\antWorker.png">
       <Filter>Resource Files\AntTextures</Filter>
     </None>
@@ -192,6 +189,9 @@
     </None>
     <None Include="scripts\conf\workerConf.lua">
       <Filter>Source Files\Scripts\conf</Filter>
+    </None>
+    <None Include="assets\art\fungus.png">
+      <Filter>Resource Files\SupportTextures</Filter>
     </None>
   </ItemGroup>
 </Project>

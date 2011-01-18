@@ -12,8 +12,7 @@ local eat_Condition = Condition:new()
 
 function eat_Condition:conditionMet(ant, blackboard)
 	--queen eats every 5 seconds
-	--local delta = blackboard.delta_sum % 5
-	return ant:GetFood() > 0  and blackboard.delta_sum >= 5 and blackboard.curAction == 0
+	return ant:GetFood() > 0  and blackboard.delta_sum >= 5
 end
 
 local eat_c = eat_Condition:new()
@@ -28,7 +27,6 @@ end
 
 function eat_Action:run(ant, blackboard)
 	ant:Eat()
-	--print("Queen just ate.  Delta sum: "..blackboard.delta_sum)
 	blackboard.delta_sum = 0
 end
 
@@ -41,7 +39,7 @@ local eat_a = eat_Action:new()
 local createLarva_Condition = Condition:new()
 
 function createLarva_Condition:conditionMet(ant, blackboard)
-	return ant:GetFood() > 0 and blackboard.larva_sum >= 3 and blackboard.curAction == 0
+	return ant:GetFood() > 0 and blackboard.larva_sum >= 3
 end
 
 local createLarva_c = createLarva_Condition:new()
@@ -54,7 +52,6 @@ function createLarva_Action:running(ant, blackboard)
 end
 
 function createLarva_Action:run(ant, blackboard)
-	--print("Queen created larva.  Larva sum: "..blackboard.larva_sum)
 	ant:CreateLarva()
 	blackboard.larva_sum = 0
 end
@@ -83,13 +80,10 @@ function QueenRun(ID, dt)
 	local ant = factory:GetAntByID(ID)
 
 	if queenBB.ID.curAction == 0 then
-		--print("NurseBT size: "..#NurseBT)
 		for key, val in pairs(QueenBT) do
 			local behavior = QueenBT[key]
 			local result = behavior.condition:conditionMet(ant, queenBB.ID)
 			if result then
-				--print("Queen: Behavior chosen: "..key)
-				--print("condition met--table key: "..key.." currentAction: "..nurseBB.ID.curAction)
 				queenBB.ID.actions = behavior.actions
 				queenBB.ID.curAction = 1
 				break;

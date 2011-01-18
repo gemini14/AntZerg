@@ -18,8 +18,7 @@ local getFood_Condition = Condition:new()
 
 function getFood_Condition:conditionMet(ant, blackboard)
 	--nurse will get food if she has less than 10 food, unless there's another current action
-	--print("in getfood condition: cur food: "..ant:GetFood().." time delta: "..blackboard.delta_sum)
-	return ant:GetFood() == 0 and factory:GetWarehouse():GetStoredFood() > 0 and blackboard.curAction == 0
+	return ant:GetFood() == 0 and factory:GetWarehouse():GetStoredFood() > 0
 end
 
 --get food condition obj
@@ -35,7 +34,7 @@ local getFood_c = getFood_Condition:new()
 local extractLarva_Condition = Condition:new()
 
 function extractLarva_Condition:conditionMet(ant, blackboard)
-	return factory:GetQueen():GetNumAvailLarvae() > 0 and ant:IsCarryingLarva() ~= true and blackboard.curAction == 0
+	return factory:GetQueen():GetNumAvailLarvae() > 0 and ant:IsCarryingLarva() ~= true
 end
 
 local extractLarva_c = extractLarva_Condition:new()
@@ -70,7 +69,7 @@ local extractLarva_a = extractLarva_Action:new()
 local placeLarva_Condition = Condition:new()
 
 function placeLarva_Condition:conditionMet(ant, blackboard)
-	return ant:IsCarryingLarva() and blackboard.curAction == 0
+	return ant:IsCarryingLarva()
 end
 
 local placeLarva_c = placeLarva_Condition:new()
@@ -96,7 +95,6 @@ function getNewLarvaLoc_Action:run(ant, blackboard)
 	
 	blackboard.target.x = x
 	blackboard.target.y = y
-	print("New larva being placed at "..blackboard.target.x..", "..blackboard.target.y.." Nurse ID: "..ant:GetID())
 end
 
 local getNewLarvaLoc_a = getNewLarvaLoc_Action:new()
@@ -127,7 +125,7 @@ local placeLarva_a = placeLarva_Action:new()
 local deliverFoodLarva_Condition = Condition:new()
 
 function deliverFoodLarva_Condition:conditionMet(ant, blackboard)
-	return ant:GetFood() > 0 and factory:LarvaNeedsFood(ant:GetID()) ~= -1 and blackboard.curAction == 0
+	return ant:GetFood() > 0 and factory:LarvaNeedsFood(ant:GetID()) ~= -1
 end
 
 local deliverFoodLarva_c = deliverFoodLarva_Condition:new()
@@ -141,12 +139,11 @@ function getLarva_Action:running(ant, blackboard)
 end
 
 function getLarva_Action:run(ant, blackboard)
-	local ID = factory:LarvaNeedsFood(ant:GetID())
-	blackboard.target.ID = ID
-	local larva = factory:GetAntByID(ID)
+	local id = factory:LarvaNeedsFood(ant:GetID())
+	blackboard.target.ID = id
+	local larva = factory:GetAntByID(id)
 	blackboard.target.x = larva:GetX()
 	blackboard.target.y = larva:GetY()
-	print("Moving to "..blackboard.target.x..", "..blackboard.target.y..", larva ID "..larva:GetID().." Nurse ID "..ant:GetID())
 end
 
 local getLarva_a = getLarva_Action:new()
@@ -162,7 +159,7 @@ local getLarva_a = getLarva_Action:new()
 local eat_Condition = Condition:new()
 
 function eat_Condition:conditionMet(ant, blackboard)
-	return ant:GetFood() > 0 and blackboard.delta_sum >= 10 and blackboard.curAction == 0
+	return ant:GetFood() > 0 and blackboard.delta_sum >= 10
 end
 
 local eat_c = eat_Condition:new()
@@ -177,7 +174,6 @@ end
 
 function eat_Action:run(ant, blackboard)
 	ant:Eat()
-	--print("Nurse just ate")
 	blackboard.delta_sum = 0
 end
 
@@ -203,7 +199,7 @@ local nurseBB = {}
 function NurseRun(ID, dt)
 	if nurseBB[ID] == nil then
 		nurseBB[ID] = { actions = {}, curAction = 0, target = {x = nil, y = nil, ID = -1}, 
-			delta_sum = 0, movement_speed = 0.5 }
+			delta_sum = 0, movement_speed = 0.6 }
 	end
 
 	local ant = factory:GetAntByID(ID)
@@ -213,16 +209,6 @@ function NurseRun(ID, dt)
 			local behavior = NurseBT[key]
 			local result = behavior.condition:conditionMet(ant, nurseBB[ID])
 			if result then
-				if ID == 2 then
-					if key == 3 then
-						--print("Nurse: Behavior chosen: "..key)
-						print("Nurse tending larva, nurse ID "..ID.." larva ID "..factory:LarvaNeedsFood(ant:GetID()))
-					elseif key == 4 then
-						print("Nurse extracting larva, nurse ID: "..ID)
-					elseif key == 5 then
-						print("Nurse placing larva, nurse ID "..ID)
-					end
-				end
 				nurseBB[ID].actions = behavior.actions
 				nurseBB[ID].curAction = 1
 				break;
@@ -251,5 +237,4 @@ function NurseRun(ID, dt)
 	end
 
 	nurseBB[ID].delta_sum = nurseBB[ID].delta_sum + dt
-	--print("current nurse delta: "..nurseBB[ID].delta_sum.." passed delta: "..dt)
 end

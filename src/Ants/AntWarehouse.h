@@ -21,10 +21,10 @@ namespace AntZerg
 		AntWarehouse(const float x, const float y);
 		~AntWarehouse();
 
-		void DepositFood(int deposit);
-		int GetStoredFood() const;
-		float GetX() const;
-		float GetY() const;
+		inline void DepositFood(int deposit);
+		inline int GetStoredFood() const;
+		inline float GetX() const;
+		inline float GetY() const;
 		static luabind::scope RegisterLua();
 		int WithdrawFood(const int withdrawal);
 	};

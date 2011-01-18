@@ -54,9 +54,7 @@ function retrieveFood_Action:run(ant, blackboard)
 	local warehouse = factory:GetWarehouse()
 	--remove 25 food by default, less is taken out if there isn't enough
 	local withdraw = warehouse:WithdrawFood(25)
-	--print("Withdrew "..withdraw.." food from the warehouse.")
 	ant:AddFood(withdraw)
-	--print("Ant has "..ant:GetFood().." food")
 end
 
 retrieveFood_a = retrieveFood_Action:new()
@@ -116,7 +114,6 @@ end
 
 function getWarehouse_Action:run(ant, blackboard)
 	local warehouse = factory:GetWarehouse()
-	print("Setting warehouse as target x: "..warehouse:GetX().." y: "..warehouse:GetY().." ID: "..ant:GetID())
 	blackboard.target.x = warehouse:GetX()
 	blackboard.target.y = warehouse:GetY()
 end
@@ -137,7 +134,6 @@ end
 
 function getQueen_Action:run(ant, blackboard)
 	local queen = factory:GetQueen()
-	print("Setting queen as target x: "..queen:GetX().." y: "..queen:GetY().." ID: "..ant:GetID())
 	blackboard.target.x = queen:GetX()
 	blackboard.target.y = queen:GetY()
 	blackboard.target.ID = queen:GetID()
@@ -157,14 +153,8 @@ end
 
 function deliverFoodAnt_Action:run(ant, blackboard)
 	if factory:GetAntByID(blackboard.target.ID) ~= nil then
-		--print("Target still exists!")
-		--print("Target has "..factory:GetAntByID(blackboard.target.ID):GetFood().." food")
-		--print("Ant has "..ant:GetFood())
 		local withdrawnFood = ant:WithdrawFood(10)
-		--print("Ant has "..ant:GetFood().." and removed "..withdrawnFood.." food")
 		factory:GetAntByID(blackboard.target.ID):AddFood(withdrawnFood)
-		--factory:GetQueen():AddFood(withdrawnFood)
-		--print("Delivered "..withdrawnFood.." food to target")
 	end
 end
 

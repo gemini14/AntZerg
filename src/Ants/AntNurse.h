@@ -21,12 +21,12 @@ namespace AntZerg
 		virtual ~AntNurse();
 
 		virtual int Eat();
-		int GetTargetID() const;
-		bool IsCarryingLarva() const;
+		inline int GetTargetID() const;
+		inline bool IsCarryingLarva() const;
 		static luabind::scope RegisterLua();
 		virtual void Run(const double dt);
-		void SetLarvaCarry(const bool carrying);
-		int WithdrawFood(const int amount);
+		inline void SetLarvaCarry(const bool carrying);
+		inline int WithdrawFood(const int amount);
 	};
 }
 

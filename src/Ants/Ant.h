@@ -41,16 +41,16 @@ namespace AntZerg
 			const std::string& actionScriptFile, const float x, const float y);
 		virtual ~Ant();
 
-		void AddFood(const int foodIncome);
-		bool CanMove() const;
+		inline void AddFood(const int foodIncome);
+		inline bool CanMove() const;
 		void DecreaseFoodStock();
 		virtual int Eat() = 0;
-		int GetFood() const;
-		int GetID() const;
+		inline int GetFood() const;
+		inline int GetID() const;
 		irr::core::vector2df GetPosition() const;
-		float GetX() const;
-		float GetY() const;
-		void PositionChange(const float delta_x, const float delta_y);
+		inline float GetX() const;
+		inline float GetY() const;
+		inline void PositionChange(const float delta_x, const float delta_y);
 		static luabind::scope RegisterLua();
 		
 		virtual void Run(const double dt) = 0;

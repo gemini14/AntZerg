@@ -22,9 +22,9 @@ namespace AntZerg
 
 		void CreateLarva();
 		virtual int Eat();
-		int ExtractLarvae();
+		inline int ExtractLarvae();
 		int GetMaxLarvaeProduced() const;
-		int GetNumAvailLarvae() const;
+		inline int GetNumAvailLarvae() const;
 		static luabind::scope RegisterLua();
 		virtual void Run(const double dt);
 	};

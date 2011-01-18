@@ -4,7 +4,7 @@
 namespace AntZerg
 {
 	FungusPlot::FungusPlot(const float x, const float y)
-		: food(1000), x(x), y(y)
+		: food(500), x(x), y(y)
 	{
 	}
 

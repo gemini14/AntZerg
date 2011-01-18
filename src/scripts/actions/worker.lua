@@ -12,11 +12,7 @@ Place new fungus plot
 local deliverFoodQueen_Condition = Condition:new()
 
 function deliverFoodQueen_Condition:conditionMet(ant, blackboard)
-	if ant:GetFood() > 10 then
-		--print("In deliver condition, current action is: "..blackboard.curAction)
-		--print("Queen food: "..factory:GetQueen():GetFood().." and worker food "..ant:GetFood())
-	end
-	return ant:GetFood() > 10 and factory:GetQueen():GetFood() < 10 and blackboard.curAction == 0
+	return ant:GetFood() > 10 and factory:GetQueen():GetFood() < 10
 end
 
 local deliverFoodQueen_c = deliverFoodQueen_Condition:new()
@@ -34,8 +30,7 @@ local deliverFoodQueen_c = deliverFoodQueen_Condition:new()
 local deliverFoodWarehouse_Condition = Condition:new()
 
 function deliverFoodWarehouse_Condition:conditionMet(ant, blackboard)
-	--print("Warehouse has "..factory:GetWarehouse():GetStoredFood())
-	return ant:GetFood() > 10 and blackboard.curAction == 0
+	return ant:GetFood() > 10
 end
 
 local deliverFoodWarehouse_c = deliverFoodWarehouse_Condition:new()
@@ -51,11 +46,8 @@ function deliverFoodWarehouse_Action:running(ant, blackboard)
 end
 
 function deliverFoodWarehouse_Action:run(ant, blackboard)
-	--print("Ant has "..ant:GetFood())
 	local withdrawal = ant:WithdrawFood(50)
-	--print("Ant has "..ant:GetFood().." and removed "..withdrawal.." food")
 	factory:GetWarehouse():DepositFood(withdrawal)
-	--print("Delivered "..withdrawal.." food to warehouse")
 end
 
 local deliverFoodWarehouse_a = deliverFoodWarehouse_Action:new()
@@ -67,7 +59,7 @@ local deliverFoodWarehouse_a = deliverFoodWarehouse_Action:new()
 local getFoodWorker_Condition = Condition:new()
 
 function getFoodWorker_Condition:conditionMet(ant, blackboard)
-	return ant:GetFood() <= 10 and blackboard.plot ~= -1 and blackboard.curAction == 0
+	return ant:GetFood() <= 10 and blackboard.plot ~= -1
 end
 
 local getFoodWorker_c = getFoodWorker_Condition:new()
@@ -81,10 +73,17 @@ function getPlot_Action:running(ant, blackboard)
 end
 
 function getPlot_Action:run(ant, blackboard)
+	if ant:GetID() == 3 then
+		print("\nGetting plot target (worker ID: "..ant:GetID()..", plot ID: "..blackboard.plot..")")
+	end
 	local plot = factory:GetPlotByID(blackboard.plot)
+	local newtarget = blackboard.plot
 	blackboard.target.x = plot:GetX()
 	blackboard.target.y = plot:GetY()
-	blackboard.target.ID = blackboard.plot
+	blackboard.target.ID = newtarget
+	if ant:GetID() == 3 then
+		print("\nGetting plot target (worker ID: "..ant:GetID()..", plot ID: "..blackboard.plot..")")
+	end
 end
 
 local getPlot_a = getPlot_Action:new()
@@ -100,9 +99,8 @@ end
 function harvestFood_Action:run(ant, blackboard)
 	local plot = factory:GetPlotByID(blackboard.plot)
 	local withdrawal = plot:WithdrawFood(100)
-	--print("Worker withdrew "..withdrawal.." food from the fungus farm.")
 	ant:AddFood(withdrawal)
-	--print("Worker has "..ant:GetFood().." food and farm has "..plot:GetFood())
+
 	if plot:GetFood() == 0 then
 		RemovePlot(blackboard.plot)
 		blackboard.plot = -1
@@ -118,7 +116,11 @@ local harvestFood_a = harvestFood_Action:new()
 local placePlot_Condition = Condition:new()
 
 function placePlot_Condition:conditionMet(ant, blackboard)
-	return blackboard.plot == -1 and blackboard.curAction == 0
+	if blackboard.plot == -1 then
+		print("Conditional: ant: "..ant:GetID().." plot: "..blackboard.plot)
+	end
+
+	return blackboard.plot == -1
 end
 
 local placePlot_c = placePlot_Condition:new()
@@ -135,14 +137,11 @@ function getNewPlotLoc_Action:run(ant, blackboard)
 	math.randomseed(seed)
 	math.random()
 
-	--random position near worker (plots may end up stacked, but it shouldn't be too big a problem;
-	--besides, ants put things in piles, too!)
 	local x = math.random(ant:GetX() - 10, ant:GetX() + 10)
 	local y = math.random(ant:GetY() - 10, ant:GetY() + 10)
 	
 	blackboard.target.x = x
 	blackboard.target.y = y
-	--print("New fungus farm being placed at "..x.." "..y)
 end
 
 local getNewPlotLoc_a = getNewPlotLoc_Action:new()
@@ -157,9 +156,14 @@ end
 
 function placePlot_Action:run(ant, blackboard)
 	local id = CreatePlot(blackboard.target.x, blackboard.target.y)
+	if ant:GetID() == 3 then
+		print("Worker 3 plot ID is "..blackboard.plot.."\n")
+	end
 	if id ~= -1 then
 		blackboard.plot = id
-		--print("Planted new farm, id is "..id)
+	end
+	if ant:GetID() == 3 then
+		print("Worker 3 plot ID is "..blackboard.plot.."\n")
 	end
 end
 
@@ -174,7 +178,7 @@ local eat_Condition = Condition:new()
 
 function eat_Condition:conditionMet(ant, blackboard)
 	--worker eats every 8 seconds
-	return ant:GetFood() > 0 and blackboard.delta_sum >= 8 and blackboard.curAction == 0
+	return ant:GetFood() > 0 and blackboard.delta_sum >= 8
 end
 
 local eat_c = eat_Condition:new()
@@ -189,7 +193,6 @@ end
 
 function eat_Action:run(ant, blackboard)
 	ant:Eat()
-	--print("Worker just ate")
 	blackboard.delta_sum = 0
 end
 
@@ -206,7 +209,7 @@ local GetFoodPlot = { condition = getFoodWorker_c, actions = { getPlot_a, moveTo
 local PlacePlot = { condition = placePlot_c, actions = { getNewPlotLoc_a, moveToTarget_a, placePlot_a } }
 local Eat = { condition = eat_c, actions = { eat_a } }
 
-local WorkerBT = { Eat, DeliverFoodQueen, DeliverFoodWarehouse, GetFoodPlot, PlacePlot }
+local WorkerBT = { Eat, DeliverFoodQueen, DeliverFoodWarehouse, PlacePlot, GetFoodPlot }
 
 
 --blackboard tables for worker ants
@@ -216,7 +219,10 @@ local workerBB = {}
 function WorkerRun(ID, dt)
 	if workerBB[ID] == nil then
 		workerBB[ID] = { actions = {}, curAction = 0, target = {x = nil, y = nil, ID = -1}, delta_sum = 0,
-			movement_speed = 0.5, plot = -1 }
+			movement_speed = 0.6, plot = -1 }
+		for k, v in pairs(workerBB) do
+			print("Ant "..k..": target: x: "..v.target.x.." y: "..v.target.y.." plot: "..v.plot)
+		end
 	end
 
 	local ant = factory:GetAntByID(ID)
@@ -226,7 +232,6 @@ function WorkerRun(ID, dt)
 			local behavior = WorkerBT[key]
 			local result = behavior.condition:conditionMet(ant, workerBB[ID])
 			if result then
-				--print("Worker: Behavior chosen: "..key)
 				workerBB[ID].actions = behavior.actions
 				workerBB[ID].curAction = 1
 				break;
