@@ -24,7 +24,14 @@ Description: AntZerg is a small C++/Lua simulation using swarm intelligence & be
 an ant colony.
 */
 
+#ifdef _DEBUG
+#ifdef _WIN32
+#include <vld.h>
+#endif
+#endif
+
 #include <memory>
+#include <sstream>
 
 #include <irrlicht.h>
 
@@ -49,21 +56,23 @@ int main()
 	luaMngr->LoadScript("scripts/conf/startup.lua");
 
 	auto prevTime = app->device->getTimer()->getTime();
+	std::wstringstream sstr;
 
+	int lastFPS = -1;
 	while(app->device->run())
 	{
-		if (app->device->isWindowActive())
-		{
-			if(app->device->getTimer()->isStopped())
-			{
-				app->device->getTimer()->start();
-			}
+		//if (app->device->isWindowActive())
+		//{
+			//if(app->device->getTimer()->isStopped())
+			//{
+			//	app->device->getTimer()->start();
+			//}
 			auto currentTime = app->device->getTimer()->getTime();
 			double dt = currentTime - prevTime;
 			prevTime = currentTime;
 			dt /= 1000.;
 			
-			factory->RunAll(dt);			
+			factory->RunAll(dt);
 			luaMngr->CallFunction("RenderUpdateAllAnts");
 
 			app->driver->beginScene(true, true, video::SColor(255, 100, 101, 140));
@@ -74,12 +83,23 @@ int main()
 			app->guienv->drawAll();
 
 			app->driver->endScene();
-		}
-		else
-		{
-			app->device->getTimer()->stop();
-			app->device->yield();
-		}
+			
+			int fps = app->driver->getFPS();
+
+			if (lastFPS != fps)
+			{
+				core::stringw str = L"AntZerg ";
+				str += "FPS: ";
+				str += fps;
+
+				app->device->setWindowCaption(str.c_str());
+				lastFPS = fps;
+			}
+		//else
+		//{
+			//app->device->getTimer()->stop();
+		//	app->device->yield();
+		//}
 	}
 
 	return 0;

@@ -14,9 +14,9 @@ namespace AntZerg
 		
 		int numTimesFoodEaten;
 
-		// this is set to desired value in Lua script
 		int maxFoodBeforeMorph;
 		bool morph;
+		int nurse;
 		
 	public:
 
@@ -24,9 +24,14 @@ namespace AntZerg
 			const std::string& actionScriptFile, const float x, const float y);
 		virtual ~AntLarva();
 		
+		inline bool CanMorph() const;
 		virtual int Eat();
+		int GetMorphFoodLimit() const;
+		int GetNumTimesEaten() const;
+		int GetNurse() const;
 		static luabind::scope RegisterLua();
 		virtual void Run(const double dt);
+		inline void SetNurse(const int nurseID);
 	};
 
 }

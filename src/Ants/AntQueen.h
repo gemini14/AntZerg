@@ -20,10 +20,11 @@ namespace AntZerg
 			const std::string& actionScriptFile, const float x, const float y);
 		virtual ~AntQueen();
 
+		void CreateLarva();
 		virtual int Eat();
-		void ExtractLarvae();
+		inline int ExtractLarvae();
 		int GetMaxLarvaeProduced() const;
-		int GetNumAvailLarvae() const;
+		inline int GetNumAvailLarvae() const;
 		static luabind::scope RegisterLua();
 		virtual void Run(const double dt);
 	};

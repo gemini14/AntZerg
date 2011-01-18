@@ -32,21 +32,35 @@ namespace AntZerg
 			AntType type;
 			float x;
 			float y;
-			float rotation;
 			irr::scene::ISceneNode *node;
 
-			AntInfo(const AntType type, const float x, const float y, const float rotation, irr::scene::ISceneNode *node);
+			AntInfo(const AntType type, const float x, const float y, irr::scene::ISceneNode *node);
 			~AntInfo();
+		};
+
+		class FungusPlotInfo : boost::noncopyable
+		{
+		public:
+
+			float x;
+			float y;
+			irr::scene::ISceneNode *node;
+
+			FungusPlotInfo(const float x, const float y, irr::scene::ISceneNode *node);
+			~FungusPlotInfo();
 		};
 
 		typedef std::map<AntType, std::shared_ptr<DisplayInfo>> AntDisplayMap;
 		typedef std::unordered_map<int, AntInfo*> AntHash;
+		typedef std::unordered_map<int, FungusPlotInfo*> FungusPlotHash;
 
 		AntDisplayMap antDisplayInfoTable;
 		AntHash antLookupTable;
+		FungusPlotHash plotTable;
 		std::shared_ptr<AppManager> app;
 		std::shared_ptr<LuaManager> lua;
 		irr::scene::ISceneNode *warehouseNode;
+		irr::video::ITexture *fungusPlotTexture;
 
 		bool IsIDPresent(const int ID);
 		AntType GetAntTypeFromString(const std::string& type);
@@ -56,11 +70,13 @@ namespace AntZerg
 		Renderer(std::shared_ptr<AppManager> app, std::shared_ptr<LuaManager> lua);
 		~Renderer();
 
-		void AddAnt(const int ID, const std::string& type, const float x, const float y, const float rotation);
+		void AddAnt(const int ID, const std::string& type, const float x, const float y);
+		void AddFungusPlot(const int ID, const float x, const float y);
 		void AddWarehouse(const float x, const float y);
 		void DrawAll();
 		void RemoveAnt(const int ID);
-		void UpdateAnt(const int ID, const float x, const float y, const float rotation);
+		void RemoveFungusPlot(const int ID);
+		void UpdateAnt(const int ID, const float x, const float y);
 	};
 }
 

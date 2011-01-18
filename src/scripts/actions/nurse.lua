@@ -5,166 +5,193 @@ Bring food to target larva
 Get food from warehouse
 Get larva from queen
 Place larva somewhere
+Eat
 --]]
 
 
 --------
 --Nurse-specific conditions, actions, & tasks
 
---Get food objective--
-getFood_Condition = Condition:new()
+--Get food objective
+
+local getFood_Condition = Condition:new()
 
 function getFood_Condition:conditionMet(ant, blackboard)
-	--nurse will get food after the 5 second mark with less than 10 food, unless there's another current action
-	--print("in getfood condition: cur food: "..ant:GetFood().." time delta: "..blackboard.delta_sum)
-	return ant:GetFood() <= 10 and blackboard.curAction == 0 --blackboard.delta_sum >= 5 and
+	--nurse will get food if she has less than 10 food, unless there's another current action
+	return ant:GetFood() == 0 and factory:GetWarehouse():GetStoredFood() > 0
 end
 
 --get food condition obj
-getFood_c = getFood_Condition:new()
+local getFood_c = getFood_Condition:new()
+
+--reuse getWarehouse_Action, moveToTarget_Action, retrieveFood_Action
+
+--end Get food objective--
 
 
-getWarehouse_Action = Action:new()
+--Extract larva objective--
 
-function getWarehouse_Action:running(ant, blackboard)
-	--setting coords can be done in one call
+local extractLarva_Condition = Condition:new()
+
+function extractLarva_Condition:conditionMet(ant, blackboard)
+	return factory:GetQueen():GetNumAvailLarvae() > 0 and ant:IsCarryingLarva() ~= true
+end
+
+local extractLarva_c = extractLarva_Condition:new()
+
+
+--reuse getQueen_Action action
+
+--reuse moveToTarget_Action action
+
+local extractLarva_Action = Action:new()
+
+function extractLarva_Action:running(ant, blackboard)
+	--removal of larva from queen is instant
 	return false
 end
 
-function getWarehouse_Action:run(ant, blackboard)
-	local warehouse = factory:GetWarehouse()
-	--print("Setting warehouse as target x: "..warehouse:GetX().." y: "..warehouse:GetY())
-	blackboard.target.x = warehouse:GetX()
-	blackboard.target.y = warehouse:GetY()
-end
-
---warehouse coords action obj
-getWarehouse_a = getWarehouse_Action:new()
-
-
-moveToTarget_Action = Action:new()
-
-function moveToTarget_Action:running(ant, blackboard)
-	local delta_x, delta_y
-	delta_x = blackboard.target.x - ant:GetX()
-	delta_y = blackboard.target.y - ant:GetY()
-	if math.abs(delta_x) < 0.5 and math.abs(delta_y) < 0.5 then
-		if blackboard.target.x == 1 and blackboard.target.y == 1 then
-			print("Arrived at target! BB-x: "..blackboard.target.x.." BB-y: "..blackboard.target.y)
-			print("Current ant pos  x: "..ant:GetX().." y: "..ant:GetY())
-		end
-		return false
-	end
-	return true
-end
-
-function moveToTarget_Action:run(ant, blackboard, dt)
-	local delta_x, delta_y
-	--calculate the delta values to the target
-	delta_x = blackboard.target.x - ant:GetX()
-	delta_y = blackboard.target.y - ant:GetY()
-
-	--this just calculates forwards/backwards or left/right
-	local plusminus_x, plusminus_y
-	if delta_x > 0 then
-		plusminus_x = 1
-	else
-		plusminus_x = -1
-	end
-
-	if delta_y > 0 then
-		plusminus_y = 1
-	else
-		plusminus_y = -1
-	end
-
-	--update the ant's position, using the set movement speed and delta_t
-	ant:PositionChange(blackboard.movement_speed * dt * plusminus_x, blackboard.movement_speed * dt * plusminus_y)
-end
-
---move to target action obj
-moveToTarget_a = moveToTarget_Action:new()
-
-
-retrieveFood_Action = Action:new()
-
-function retrieveFood_Action:running(ant, blackboard)
-	return false
-end
-
-function retrieveFood_Action:run(ant, blackboard)
-	local warehouse = factory:GetWarehouse()
-	--remove 25 food by default, less is taken out if there isn't enough
-	local withdraw = warehouse:WithdrawFood(25)
-	--print("Nurse withdrew "..withdraw.." food from the warehouse.")
-	ant:AddFood(withdraw)
-	--print("Nurse has "..ant:GetFood().." food")
-end
-
-retrieveFood_a = retrieveFood_Action:new()
-
---End Get food objective--
-
---Deliver food to queen objective--
-
-deliverFoodQueen_Condition = Condition:new()
-
-function deliverFoodQueen_Condition:conditionMet(ant, blackboard)
-	if ant:GetFood() > 10 then
-		print("In deliver condition, current action is: "..blackboard.curAction)
-		print("Queen food: "..factory:GetQueen():GetFood())
-	end
-	return ant:GetFood() > 10 and factory:GetQueen():GetFood() < 10 and blackboard.curAction == 0
-end
-
-deliverFoodQueen_c = deliverFoodQueen_Condition:new()
-
-
-getQueen_Action = Action:new()
-
-function getQueen_Action:running(ant, blackboard)
-	return false
-end
-
-function getQueen_Action:run(ant, blackboard)
+function extractLarva_Action:run(ant, blackboard)
 	local queen = factory:GetQueen()
-	print("Setting queen as target x: "..queen:GetX().." y: "..queen:GetY())
-	blackboard.target.x = queen:GetX()
-	blackboard.target.y = queen:GetY()
-	blackboard.target.ID = queen:GetID()
+	local larva = queen:ExtractLarvae()
+	if larva ~= 0 then
+		ant:SetLarvaCarry(true)
+	end
 end
 
-getQueen_a = getQueen_Action:new()
+local extractLarva_a = extractLarva_Action:new()
+
+--end Extract larva objective--
 
 
---this objective will reuse the moveToTarget_Action action
+--Place larva objective--
+
+local placeLarva_Condition = Condition:new()
+
+function placeLarva_Condition:conditionMet(ant, blackboard)
+	return ant:IsCarryingLarva()
+end
+
+local placeLarva_c = placeLarva_Condition:new()
 
 
-deliverFood_Action = Action:new()
+local getNewLarvaLoc_Action = Action:new()
 
-function deliverFood_Action:running(ant, blackboard)
+function getNewLarvaLoc_Action:running(ant, blackboard)
+	--target acquisition is instant
 	return false
 end
 
-function deliverFood_Action:run(ant, blackboard)
-	print("Queen has "..factory:GetQueen():GetFood().." food")
-	print("Ant has "..ant:GetFood())
-	local withdrawnFood = ant:WithdrawFood(10)
-	print("Ant has "..ant:GetFood().." and removed "..withdrawnFood.." food")
-	factory:GetQueen():AddFood(withdrawnFood)
-	print("Delivered "..withdrawnFood.." food to queen")
+function getNewLarvaLoc_Action:run(ant, blackboard)
+	local queen = factory:GetQueen()
+	local seed = os.clock()
+	math.randomseed(seed)
+	math.random()
+
+	--random position near queen (larvae may end up stacked, but it shouldn't be too big a problem;
+	--besides, ants put things in piles, too!)
+	local x = math.random(queen:GetX() - 10, queen:GetX() + 10)
+	local y = math.random(queen:GetY() - 10, queen:GetY() + 10)
+	
+	blackboard.target.x = x
+	blackboard.target.y = y
 end
 
-deliverFood_a = deliverFood_Action:new()
+local getNewLarvaLoc_a = getNewLarvaLoc_Action:new()
 
---End deliver food to queen objective--
+
+--reuse moveToTarget_Action action
+
+
+local placeLarva_Action = Action:new()
+
+function placeLarva_Action:running(ant, blackboard)
+	--placement is instant
+	return false
+end
+
+function placeLarva_Action:run(ant, blackboard)
+	local id = AddAnt("larva", blackboard.target.x, blackboard.target.y)
+	if id ~= -1 then
+		factory:GetAntByID(id):SetNurse(ant:GetID())
+		ant:SetLarvaCarry(false)
+	end
+end
+
+local placeLarva_a = placeLarva_Action:new()
+
+--end Place larva objective--
+
+--DeliverFoodLarva--
+
+local deliverFoodLarva_Condition = Condition:new()
+
+function deliverFoodLarva_Condition:conditionMet(ant, blackboard)
+	return ant:GetFood() > 0 and factory:LarvaNeedsFood(ant:GetID()) ~= -1
+end
+
+local deliverFoodLarva_c = deliverFoodLarva_Condition:new()
+
+
+local getLarva_Action = Action:new()
+
+function getLarva_Action:running(ant, blackboard)
+	--larva acquisition is instant
+	return false
+end
+
+function getLarva_Action:run(ant, blackboard)
+	local id = factory:LarvaNeedsFood(ant:GetID())
+	blackboard.target.ID = id
+	local larva = factory:GetAntByID(id)
+	blackboard.target.x = larva:GetX()
+	blackboard.target.y = larva:GetY()
+end
+
+local getLarva_a = getLarva_Action:new()
+
+
+--reuse moveToTarget_Action action
+--reuse deliverFoodAnt_Action action
+
+--end DeliverFoodLarva--
+
+--Eat--
+
+local eat_Condition = Condition:new()
+
+function eat_Condition:conditionMet(ant, blackboard)
+	return ant:GetFood() > 0 and blackboard.delta_sum >= 10
+end
+
+local eat_c = eat_Condition:new()
+
+
+local eat_Action = Action:new()
+
+function eat_Action:running(ant, blackboard)
+	--eating is...fast
+	return false
+end
+
+function eat_Action:run(ant, blackboard)
+	ant:Eat()
+	blackboard.delta_sum = 0
+end
+
+local eat_a = eat_Action:new()
+
+--end Eat--
 --------
 
 --Actual nurse ant behavior tree--
 local GetFood = { condition = getFood_c, actions = { getWarehouse_a, moveToTarget_a, retrieveFood_a } } 
-local DeliverFoodQueen = { condition = deliverFoodQueen_c, actions = { getQueen_a, moveToTarget_a, deliverFood_a } }
+local ExtractLarva = { condition = extractLarva_c, actions = { getQueen_a, moveToTarget_a, extractLarva_a } }
+local PlaceLarva = { condition = placeLarva_c, actions = { getNewLarvaLoc_a, moveToTarget_a, placeLarva_a } }
+local DeliverFoodLarva = { condition = deliverFoodLarva_c, actions = { getLarva_a, moveToTarget_a, deliverFoodAnt_a } }
+local Eat = { condition = eat_c, actions = { eat_a } }
 
-local NurseBT = { GetFood, DeliverFoodQueen }
+local NurseBT = { GetFood, Eat, DeliverFoodLarva, ExtractLarva, PlaceLarva }
 
 
 --blackboard tables for individual ants (or nurses, rather)
@@ -172,47 +199,44 @@ local nurseBB = {}
 
 
 function NurseRun(ID, dt)
-	if nurseBB.ID == nil then
-		nurseBB.ID = { actions = {}, curAction = 0, target = {x = nil, y = nil, ID = -1}, delta_sum = 0, movement_speed = 0.2 }
+	if nurseBB[ID] == nil then
+		nurseBB[ID] = { actions = {}, curAction = 0, target = {x = nil, y = nil, ID = -1}, 
+			delta_sum = 0, movement_speed = 0.6 }
 	end
 
 	local ant = factory:GetAntByID(ID)
 	
-	if nurseBB.ID.curAction == 0 then
-		--print("NurseBT size: "..#NurseBT)
+	if nurseBB[ID].curAction == 0 then
 		for key, val in pairs(NurseBT) do
 			local behavior = NurseBT[key]
-			local result = behavior.condition:conditionMet(ant, nurseBB.ID)
+			local result = behavior.condition:conditionMet(ant, nurseBB[ID])
 			if result then
-				print("Behavior chosen: "..key)
-				--print("condition met--table key: "..key.." currentAction: "..nurseBB.ID.curAction)
-				nurseBB.ID.actions = behavior.actions
-				nurseBB.ID.curAction = 1
+				nurseBB[ID].actions = behavior.actions
+				nurseBB[ID].curAction = 1
 				break;
 			end
 		end		
 	end
 
-	local curAction = nurseBB.ID.curAction
+	local curAction = nurseBB[ID].curAction
 	--run the current action
-	if curAction ~= 0 and nurseBB.ID.actions ~= nil then
-		nurseBB.ID.actions[curAction]:run(ant, nurseBB.ID, dt)
+	if curAction ~= 0 and nurseBB[ID].actions ~= nil then
+		nurseBB[ID].actions[curAction]:run(ant, nurseBB[ID], dt)
 	
 		--see if it's done and update current action and actions tree for ant
-		local status = nurseBB.ID.actions[curAction]:running(ant, nurseBB.ID)
+		local status = nurseBB[ID].actions[curAction]:running(ant, nurseBB[ID])
 		if status == false then
-			if nurseBB.ID.actions[curAction + 1] ~= nil then
-				nurseBB.ID.curAction = curAction + 1
+			if nurseBB[ID].actions[curAction + 1] ~= nil then
+				nurseBB[ID].curAction = curAction + 1
 			else
-				nurseBB.ID.actions = nil
-				nurseBB.ID.curAction = 0
-				nurseBB.ID.target.x = nil
-				nurseBB.ID.target.y = nil
-				nurseBB.ID.target.ID = -1
+				nurseBB[ID].actions = nil
+				nurseBB[ID].curAction = 0
+				nurseBB[ID].target.x = nil
+				nurseBB[ID].target.y = nil
+				nurseBB[ID].target.ID = -1
 			end
 		end
 	end
 
-	nurseBB.ID.delta_sum = nurseBB.ID.delta_sum + dt
-	--print("current nurse delta: "..nurseBB.ID.delta_sum.." passed delta: "..dt)
+	nurseBB[ID].delta_sum = nurseBB[ID].delta_sum + dt
 end

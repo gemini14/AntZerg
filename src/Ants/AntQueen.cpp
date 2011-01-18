@@ -5,7 +5,7 @@ namespace AntZerg
 {
 	AntQueen::AntQueen(const int ID, std::shared_ptr<LuaManager> lua, const std::string& configFile, 
 		const std::string& actionScriptFile, const float x, const float y)
-		: Ant(ID, false, lua, configFile, actionScriptFile, x, y), numLarvaeProduced(0), numLarvaeAvailable(0)
+		: Ant(ID, false, lua, configFile, actionScriptFile, x, y), numLarvaeProduced(0), numLarvaeAvailable(5)
 	{
 	}
 
@@ -13,25 +13,35 @@ namespace AntZerg
 	{
 	}
 
+	void AntQueen::CreateLarva()
+	{
+		if(GetFood() > 0)
+		{
+			numLarvaeProduced++;
+			numLarvaeAvailable++;
+		}
+	}
+
 	int AntQueen::Eat()
 	{
 		if(GetFood() > 0)
 		{
 			DecreaseFoodStock();
-			numLarvaeProduced++;
-			numLarvaeAvailable++;
 			return 1;
 		}
 		
 		return 0;
 	}
 
-	void AntQueen::ExtractLarvae()
+	int AntQueen::ExtractLarvae()
 	{
 		if(numLarvaeAvailable)
 		{
 			numLarvaeAvailable--;
+			return 1;
 		}
+
+		return 0;
 	}
 
 	int AntQueen::GetMaxLarvaeProduced() const
@@ -51,7 +61,8 @@ namespace AntZerg
 			.def("Eat", &AntQueen::Eat)
 			.def("ExtractLarvae", &AntQueen::ExtractLarvae)
 			.def("GetMaxLarvaeProduced", &AntQueen::GetMaxLarvaeProduced)
-			.def("GetNumAvailLarvae", &AntQueen::GetNumAvailLarvae);
+			.def("GetNumAvailLarvae", &AntQueen::GetNumAvailLarvae)
+			.def("CreateLarva", &AntQueen::CreateLarva);
 	}
 
 	void AntQueen::Run(const double dt)

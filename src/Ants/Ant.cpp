@@ -16,11 +16,13 @@ namespace AntZerg
 	{
 	}
 
-	void Ant::AddFood(const int food)
+	void Ant::AddFood(const int foodIncome)
 	{
-		if(food)
+		if(foodIncome)
 		{
-			this->food += food;
+			//std::cout << "Ant had " << food << " food, now has ";
+			food += foodIncome;
+			//std::cout << food << " food (income: " << foodIncome << ").\n";
 		}
 	}
 
