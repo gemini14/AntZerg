@@ -3,6 +3,7 @@
 
 
 #include "Ant.h"
+#include "Blackboards/WorkerBlackboard.h"
 
 
 namespace AntZerg
@@ -12,6 +13,8 @@ namespace AntZerg
 	private:
 
 	public:
+
+		WorkerBlackboard blackboard;
 
 		AntWorker(const int ID, std::shared_ptr<LuaManager> lua, const std::string& configFile,
 			const std::string& actionScriptFile, const float x, const float y);

@@ -7,6 +7,13 @@ namespace AntZerg
 		const std::string& configFile,const std::string& actionScriptFile, const float x, const float y)
 		: Ant(ID, true, lua, configFile, actionScriptFile, x, y)
 	{
+		using namespace luabind;
+
+		auto confTable = lua->GetObject("WorkerConf");
+		assert(confTable.is_valid()  && type(confTable) == LUA_TTABLE);
+
+		float move_speed = object_cast<float>(confTable["movement_speed"]);
+		blackboard = WorkerBlackboard(move_speed);
 	}
 
 	AntWorker::~AntWorker()
@@ -29,7 +36,8 @@ namespace AntZerg
 		using namespace luabind;
 		return class_<AntWorker, Ant>("AntWorker")
 			.def("Eat", &AntWorker::Eat)
-			.def("WithdrawFood", &AntWorker::WithdrawFood);
+			.def("WithdrawFood", &AntWorker::WithdrawFood)
+			.def_readwrite("blackboard", &AntWorker::blackboard);
 	}
 
 	void AntWorker::Run(const double dt)
@@ -40,7 +48,7 @@ namespace AntZerg
 		}
 		catch (luabind::error& e)
 		{
-			std::string error = lua_tostring(lua->GetLuaState(), -1);
+			std::string error(lua_tostring(lua->GetLuaState(), -1));
 			std::cout << "\n" << e.what() << "\n" << error << "\n";
 		}
 	}

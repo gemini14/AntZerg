@@ -9,7 +9,7 @@ function Condition:new(obj)
 	return obj
 end
 
-function Condition:conditionMet(ant, blackboard)
+function Condition:conditionMet(ant)
 	return true
 end
 
@@ -33,27 +33,24 @@ function Action:running()
 	return true
 end
 
-function Action:run(ant, blackboard)
+function Action:run(ant)
 end
 
 
 --Get food from warehouse action--
 retrieveFood_Action = Action:new()
 
-function retrieveFood_Action:running(ant, blackboard)
-	local running
+function retrieveFood_Action:running(ant)
 	if ant:GetFood() ~= 0 then
-		running = false
-	else
-		running = true
+		return false
 	end
-	return running
+	
+	return true
 end
 
-function retrieveFood_Action:run(ant, blackboard)
-	local warehouse = factory:GetWarehouse()
+function retrieveFood_Action:run(ant)
 	--remove 25 food by default, less is taken out if there isn't enough
-	local withdraw = warehouse:WithdrawFood(25)
+	local withdraw = factory:GetWarehouse():WithdrawFood(25)
 	ant:AddFood(withdraw)
 end
 
@@ -64,21 +61,21 @@ retrieveFood_a = retrieveFood_Action:new()
 --Move to target action--
 moveToTarget_Action = Action:new()
 
-function moveToTarget_Action:running(ant, blackboard)
+function moveToTarget_Action:running(ant)
 	local delta_x, delta_y
-	delta_x = blackboard.target.x - ant:GetX()
-	delta_y = blackboard.target.y - ant:GetY()
+	delta_x = ant.blackboard.target_x - ant:GetX()
+	delta_y = ant.blackboard.target_y - ant:GetY()
 	if math.abs(delta_x) < 0.5 and math.abs(delta_y) < 0.5 then
 		return false
 	end
 	return true
 end
 
-function moveToTarget_Action:run(ant, blackboard, dt)
+function moveToTarget_Action:run(ant, dt)
 	local delta_x, delta_y
 	--calculate the delta values to the target
-	delta_x = blackboard.target.x - ant:GetX()
-	delta_y = blackboard.target.y - ant:GetY()
+	delta_x = ant.blackboard.target_x - ant:GetX()
+	delta_y = ant.blackboard.target_y - ant:GetY()
 
 	--this just calculates forwards/backwards or left/right
 	local plusminus_x, plusminus_y
@@ -95,7 +92,7 @@ function moveToTarget_Action:run(ant, blackboard, dt)
 	end
 
 	--update the ant's position, using the set movement speed and delta_t
-	ant:PositionChange(blackboard.movement_speed * dt * plusminus_x, blackboard.movement_speed * dt * plusminus_y)
+	ant:PositionChange(ant.blackboard.movement_speed * dt * plusminus_x, ant.blackboard.movement_speed * dt * plusminus_y)
 end
 
 --move to target action obj
@@ -107,15 +104,15 @@ moveToTarget_a = moveToTarget_Action:new()
 --Get warehouse target action--
 getWarehouse_Action = Action:new()
 
-function getWarehouse_Action:running(ant, blackboard)
+function getWarehouse_Action:running(ant)
 	--setting coords can be done in one call
 	return false
 end
 
-function getWarehouse_Action:run(ant, blackboard)
+function getWarehouse_Action:run(ant)
 	local warehouse = factory:GetWarehouse()
-	blackboard.target.x = warehouse:GetX()
-	blackboard.target.y = warehouse:GetY()
+	ant.blackboard.target_x = warehouse:GetX()
+	ant.blackboard.target_y = warehouse:GetY()
 end
 
 --warehouse coords action obj
@@ -128,15 +125,15 @@ getWarehouse_a = getWarehouse_Action:new()
 
 getQueen_Action = Action:new()
 
-function getQueen_Action:running(ant, blackboard)
+function getQueen_Action:running(ant)
 	return false
 end
 
-function getQueen_Action:run(ant, blackboard)
+function getQueen_Action:run(ant)
 	local queen = factory:GetQueen()
-	blackboard.target.x = queen:GetX()
-	blackboard.target.y = queen:GetY()
-	blackboard.target.ID = queen:GetID()
+	ant.blackboard.target_x = queen:GetX()
+	ant.blackboard.target_y = queen:GetY()
+	ant.blackboard.target_ID = queen:GetID()
 end
 
 getQueen_a = getQueen_Action:new()
@@ -147,14 +144,14 @@ getQueen_a = getQueen_Action:new()
 --Deliver food ant action--
 deliverFoodAnt_Action = Action:new()
 
-function deliverFoodAnt_Action:running(ant, blackboard)
+function deliverFoodAnt_Action:running(ant)
 	return false
 end
 
-function deliverFoodAnt_Action:run(ant, blackboard)
-	if factory:GetAntByID(blackboard.target.ID) ~= nil then
+function deliverFoodAnt_Action:run(ant)
+	if factory:GetAntByID(ant.blackboard.target_ID) ~= nil then
 		local withdrawnFood = ant:WithdrawFood(10)
-		factory:GetAntByID(blackboard.target.ID):AddFood(withdrawnFood)
+		factory:GetAntByID(ant.blackboard.target_ID):AddFood(withdrawnFood)
 	end
 end
 

@@ -31,7 +31,6 @@ an ant colony.
 #endif
 
 #include <memory>
-#include <sstream>
 
 #include <irrlicht.h>
 
@@ -50,23 +49,19 @@ int main()
 	std::shared_ptr<LuaManager> luaMngr(std::make_shared<LuaManager>());
 	std::unique_ptr<AntFactory> factory((new AntFactory(luaMngr)));
 	std::unique_ptr<Renderer> renderer((new Renderer(app, luaMngr)));
+	app->device->setWindowCaption(L"AntZerg");
 
 	luaMngr->LoadScript("scripts/actions/behaviorTree.lua");
 	luaMngr->LoadScript("scripts/antUtilities.lua");
 	luaMngr->LoadScript("scripts/conf/startup.lua");
 
 	auto prevTime = app->device->getTimer()->getTime();
-	std::wstringstream sstr;
-
+	
+#ifdef _DEBUG
 	int lastFPS = -1;
+#endif
 	while(app->device->run())
 	{
-		//if (app->device->isWindowActive())
-		//{
-			//if(app->device->getTimer()->isStopped())
-			//{
-			//	app->device->getTimer()->start();
-			//}
 			auto currentTime = app->device->getTimer()->getTime();
 			double dt = currentTime - prevTime;
 			prevTime = currentTime;
@@ -84,6 +79,7 @@ int main()
 
 			app->driver->endScene();
 			
+#ifdef _DEBUG
 			int fps = app->driver->getFPS();
 
 			if (lastFPS != fps)
@@ -95,11 +91,7 @@ int main()
 				app->device->setWindowCaption(str.c_str());
 				lastFPS = fps;
 			}
-		//else
-		//{
-			//app->device->getTimer()->stop();
-		//	app->device->yield();
-		//}
+#endif
 	}
 
 	return 0;

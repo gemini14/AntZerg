@@ -3,6 +3,7 @@
 
 
 #include "Ant.h"
+#include "Blackboards/LarvaBlackboard.h"
 
 
 namespace AntZerg
@@ -20,6 +21,8 @@ namespace AntZerg
 		
 	public:
 
+		LarvaBlackboard blackboard;
+		
 		AntLarva(const int ID, std::shared_ptr<LuaManager> lua, const std::string& configFile, 
 			const std::string& actionScriptFile, const float x, const float y);
 		virtual ~AntLarva();

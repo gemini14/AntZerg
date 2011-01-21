@@ -5,7 +5,8 @@ namespace AntZerg
 {
 	AntQueen::AntQueen(const int ID, std::shared_ptr<LuaManager> lua, const std::string& configFile, 
 		const std::string& actionScriptFile, const float x, const float y)
-		: Ant(ID, false, lua, configFile, actionScriptFile, x, y), numLarvaeProduced(0), numLarvaeAvailable(5)
+		: Ant(ID, false, lua, configFile, actionScriptFile, x, y), numLarvaeProduced(0), numLarvaeAvailable(5),
+		blackboard()
 	{
 	}
 
@@ -62,7 +63,8 @@ namespace AntZerg
 			.def("ExtractLarvae", &AntQueen::ExtractLarvae)
 			.def("GetMaxLarvaeProduced", &AntQueen::GetMaxLarvaeProduced)
 			.def("GetNumAvailLarvae", &AntQueen::GetNumAvailLarvae)
-			.def("CreateLarva", &AntQueen::CreateLarva);
+			.def("CreateLarva", &AntQueen::CreateLarva)
+			.def_readwrite("blackboard", &AntQueen::blackboard);
 	}
 
 	void AntQueen::Run(const double dt)
@@ -73,7 +75,7 @@ namespace AntZerg
 		}
 		catch (luabind::error& e)
 		{
-			std::string error = lua_tostring(lua->GetLuaState(), -1);
+			std::string error(lua_tostring(lua->GetLuaState(), -1));
 			std::cout << "\n" << e.what() << "\n" << error << "\n";
 		}
 	}

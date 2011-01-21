@@ -18,6 +18,15 @@
 
 namespace AntZerg
 {
+	AntFactory::AntInfo::AntInfo(const std::string& type, const float x, const float y)
+		: type(type), x(x), y(y)
+	{
+	}
+
+	AntFactory::AntInfo::~AntInfo()
+	{
+	}
+
 	bool AntFactory::IsIDPresent(const int ID)
 	{
 		return antLookupTable.find(ID) != antLookupTable.end();
@@ -30,6 +39,11 @@ namespace AntZerg
 		using namespace luabind;
 		module(lua->GetLuaState())
 			[
+				Blackboard::RegisterLua(),
+				LarvaBlackboard::RegisterLua(),
+				QueenBlackboard::RegisterLua(),
+				NurseBlackboard::RegisterLua(),
+				WorkerBlackboard::RegisterLua(),
 				Ant::RegisterLua(),
 				AntLarva::RegisterLua(),
 				AntQueen::RegisterLua(),
@@ -48,6 +62,7 @@ namespace AntZerg
 				.def("LarvaNeedsFood", &AntFactory::LarvaNeedsFood)
 				.def("CreateFungusPlot", &AntFactory::CreateFungusPlot)
 				.def("RemoveFungusPlot", &AntFactory::RemoveFungusPlot)
+				.def("QueueCreateAnt", &AntFactory::QueueCreateAnt)
 			];
 		luabind::globals(lua->GetLuaState())["factory"] = this;
 	}
@@ -58,6 +73,11 @@ namespace AntZerg
 		{
 			delete iter->second;
 		}
+		for(auto iter = fungusPlots.begin(); iter != fungusPlots.end(); ++iter)
+		{
+			delete iter->second;
+		}
+		delete warehouse;
 	}
 
 	int AntFactory::CreateAnt(const std::string& antType, const float x, const float y)
@@ -124,6 +144,8 @@ namespace AntZerg
 			numAntsAlive++;
 			maxAntsAlive++;
 		}
+
+		// return the ID
 		return temp ? antID_counter : -1;
 	}
 
@@ -197,10 +219,11 @@ namespace AntZerg
 		for(auto iter = larvaList.begin(); iter != larvaList.end(); ++iter)
 		{
 			auto ant = dynamic_cast<AntLarva*>(GetAntByID((*iter)));
-			if(ant->GetNurse() == nurseID)
+			if(ant->GetNurse() == nurseID || ant->GetNurse() == -1)
 			{
 				if(ant->GetFood() + ant->GetNumTimesEaten() < ant->GetMorphFoodLimit())
 				{
+					ant->SetNurse(nurseID);
 					return (*iter);
 				}
 			}
@@ -209,11 +232,16 @@ namespace AntZerg
 		return -1;
 	}
 
+	void AntFactory::QueueCreateAnt(const std::string& antType, const float x, const float y)
+	{
+		queueAdd.push(AntInfo(antType, x, y));
+	}
+
 	void AntFactory::RemoveAnt(const int ID)
 	{
 		if(IsIDPresent(ID))
 		{
-			deletionList.push_back(ID);
+			queueDelete.push(ID);
 			numAntsDead++;
 			numAntsAlive--;
 
@@ -242,9 +270,17 @@ namespace AntZerg
 			iter->second->Run(dt);
 		}
 
-		for(auto iter = deletionList.begin(); iter != deletionList.end(); ++iter)
+		while(!queueDelete.empty())
 		{
-			antLookupTable.erase(*iter);
+			antLookupTable.erase(queueDelete.front());
+			queueDelete.pop();
+		}
+
+		while(!queueAdd.empty())
+		{
+			auto antInfo = queueAdd.front();
+			lua->CallFunction("AddAnt", antInfo.type, antInfo.x, antInfo.y);
+			queueAdd.pop();
 		}
 	}
 }

@@ -9,9 +9,9 @@ namespace AntZerg
 
 	LuaManager::LuaManager()
 	{
-		luaState = lua_open();
-		luabind::open(luaState);
+		luaState = luaL_newstate();
 		luaL_openlibs(luaState);
+		luabind::open(luaState);		
 	}
 
 	LuaManager::~LuaManager()
@@ -37,6 +37,11 @@ namespace AntZerg
 		luabind::call_function<void>(luaState, functionName.c_str(), ID, dt);
 	}
 
+	void LuaManager::CallFunction(const std::string& functionName, const std::string& type, const float x, const float y)
+	{
+		luabind::call_function<void>(luaState, functionName.c_str(), type.c_str(), x, y);
+	}
+
 	lua_State* const LuaManager::GetLuaState() const
 	{
 		return luaState;
@@ -58,7 +63,7 @@ namespace AntZerg
 #ifdef _DEBUG
 			std::cout << "Error loading lua script.  Error code: " << result << std::endl;
 #endif
-			std::string error = lua_tostring(luaState, -1);
+			std::string error(lua_tostring(luaState, -1));
 			std::cout << "\n" << error << "\n";
 			return false;
 		}

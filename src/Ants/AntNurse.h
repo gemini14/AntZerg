@@ -3,6 +3,7 @@
 
 
 #include "Ant.h"
+#include "Blackboards/NurseBlackboard.h"
 
 
 namespace AntZerg
@@ -15,6 +16,8 @@ namespace AntZerg
 		int targetID;
 
 	public:
+
+		NurseBlackboard blackboard;
 
 		AntNurse(const int ID, std::shared_ptr<LuaManager> lua, const std::string& configFile, 
 		const std::string& actionScriptFile, const float x, const float y);

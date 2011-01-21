@@ -52,6 +52,12 @@
     <Filter Include="Source Files\FungusPlot">
       <UniqueIdentifier>{ba275d2d-848b-46ac-a17e-c0ef20c8d52e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Ants\Blackboards">
+      <UniqueIdentifier>{fd9a61e7-3a86-4152-83c5-9ff1376e7dcb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Ants\Blackboards">
+      <UniqueIdentifier>{2d4df715-d860-4898-a35e-1f0b078337c5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AppManager.cpp">
@@ -93,6 +99,21 @@
     <ClCompile Include="FungusPlot\FungusPlot.cpp">
       <Filter>Source Files\FungusPlot</Filter>
     </ClCompile>
+    <ClCompile Include="Ants\Blackboards\Blackboard.cpp">
+      <Filter>Source Files\Ants\Blackboards</Filter>
+    </ClCompile>
+    <ClCompile Include="Ants\Blackboards\NurseBlackboard.cpp">
+      <Filter>Source Files\Ants\Blackboards</Filter>
+    </ClCompile>
+    <ClCompile Include="Ants\Blackboards\WorkerBlackboard.cpp">
+      <Filter>Source Files\Ants\Blackboards</Filter>
+    </ClCompile>
+    <ClCompile Include="Ants\Blackboards\LarvaBlackboard.cpp">
+      <Filter>Source Files\Ants\Blackboards</Filter>
+    </ClCompile>
+    <ClCompile Include="Ants\Blackboards\QueenBlackboard.cpp">
+      <Filter>Source Files\Ants\Blackboards</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppManager.h">
@@ -130,6 +151,21 @@
     </ClInclude>
     <ClInclude Include="FungusPlot\FungusPlot.h">
       <Filter>Header Files\FungusPlot</Filter>
+    </ClInclude>
+    <ClInclude Include="Ants\Blackboards\Blackboard.h">
+      <Filter>Header Files\Ants\Blackboards</Filter>
+    </ClInclude>
+    <ClInclude Include="Ants\Blackboards\NurseBlackboard.h">
+      <Filter>Header Files\Ants\Blackboards</Filter>
+    </ClInclude>
+    <ClInclude Include="Ants\Blackboards\WorkerBlackboard.h">
+      <Filter>Header Files\Ants\Blackboards</Filter>
+    </ClInclude>
+    <ClInclude Include="Ants\Blackboards\LarvaBlackboard.h">
+      <Filter>Header Files\Ants\Blackboards</Filter>
+    </ClInclude>
+    <ClInclude Include="Ants\Blackboards\QueenBlackboard.h">
+      <Filter>Header Files\Ants\Blackboards</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
