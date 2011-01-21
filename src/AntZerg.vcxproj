@@ -49,6 +49,7 @@
       <SubSystem>Console</SubSystem>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
       <Profile>true</Profile>
+      <OptimizeReferences>false</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -80,6 +81,11 @@
     <ClCompile Include="Ants\AntQueen.cpp" />
     <ClCompile Include="Ants\AntWarehouse.cpp" />
     <ClCompile Include="Ants\AntWorker.cpp" />
+    <ClCompile Include="Ants\Blackboards\Blackboard.cpp" />
+    <ClCompile Include="Ants\Blackboards\LarvaBlackboard.cpp" />
+    <ClCompile Include="Ants\Blackboards\NurseBlackboard.cpp" />
+    <ClCompile Include="Ants\Blackboards\QueenBlackboard.cpp" />
+    <ClCompile Include="Ants\Blackboards\WorkerBlackboard.cpp" />
     <ClCompile Include="AppManager.cpp" />
     <ClCompile Include="FungusPlot\FungusPlot.cpp" />
     <ClCompile Include="Lua\LuaManager.cpp" />
@@ -95,6 +101,11 @@
     <ClInclude Include="Ants\AntQueen.h" />
     <ClInclude Include="Ants\AntWarehouse.h" />
     <ClInclude Include="Ants\AntWorker.h" />
+    <ClInclude Include="Ants\Blackboards\Blackboard.h" />
+    <ClInclude Include="Ants\Blackboards\LarvaBlackboard.h" />
+    <ClInclude Include="Ants\Blackboards\NurseBlackboard.h" />
+    <ClInclude Include="Ants\Blackboards\QueenBlackboard.h" />
+    <ClInclude Include="Ants\Blackboards\WorkerBlackboard.h" />
     <ClInclude Include="AppManager.h" />
     <ClInclude Include="FungusPlot\FungusPlot.h" />
     <ClInclude Include="Lua\LuaManager.h" />

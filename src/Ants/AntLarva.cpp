@@ -5,7 +5,8 @@ namespace AntZerg
 {
 	AntLarva::AntLarva(const int ID, std::shared_ptr<LuaManager> lua, const std::string& configFile, 
 		const std::string& actionScriptFile, const float x, const float y)
-		: Ant(ID, false, lua, configFile, actionScriptFile, x, y), numTimesFoodEaten(0), morph(false), nurse(-1)
+		: Ant(ID, false, lua, configFile, actionScriptFile, x, y), numTimesFoodEaten(0), morph(false), nurse(-1),
+		blackboard()
 	{
 		using namespace luabind;
 
@@ -63,7 +64,8 @@ namespace AntZerg
 		return class_<AntLarva, Ant>("AntLarva")
 			.def("CanMorph", &AntLarva::CanMorph)
 			.def("Eat", &AntLarva::Eat)
-			.def("SetNurse", &AntLarva::SetNurse);
+			.def("SetNurse", &AntLarva::SetNurse)
+			.def_readwrite("blackboard", &AntLarva::blackboard);
 	}
 
 	void AntLarva::Run(const double dt)
@@ -74,7 +76,7 @@ namespace AntZerg
 		}
 		catch (luabind::error& e)
 		{
-			std::string error = lua_tostring(lua->GetLuaState(), -1);
+			std::string error(lua_tostring(lua->GetLuaState(), -1));
 			std::cout << "\n" << e.what() << "\n" << error << "\n";
 		}
 	}

@@ -7,6 +7,13 @@ namespace AntZerg
 		const std::string& actionScriptFile, const float x, const float y)
 		: Ant(ID, true, lua, configFile, actionScriptFile, x, y), larva_carry(false), targetID(-1)
 	{
+		using namespace luabind;
+
+		auto confTable = lua->GetObject("NurseConf");
+		assert(confTable.is_valid()  && type(confTable) == LUA_TTABLE);
+
+		float move_speed = object_cast<float>(confTable["movement_speed"]);
+		blackboard = NurseBlackboard(move_speed);
 	}
 
 	AntNurse::~AntNurse()
@@ -40,7 +47,8 @@ namespace AntZerg
 		return class_<AntNurse, Ant>("AntNurse")
 			.def("IsCarryingLarva", &AntNurse::IsCarryingLarva)
 			.def("SetLarvaCarry", &AntNurse::SetLarvaCarry)
-			.def("WithdrawFood", &AntNurse::WithdrawFood);
+			.def("WithdrawFood", &AntNurse::WithdrawFood)
+			.def_readwrite("blackboard", &AntNurse::blackboard);
 	}
 
 	void AntNurse::Run(const double dt)
@@ -51,7 +59,7 @@ namespace AntZerg
 		}
 		catch (luabind::error& e)
 		{
-			std::string error = lua_tostring(lua->GetLuaState(), -1);
+			std::string error(lua_tostring(lua->GetLuaState(), -1));
 			std::cout << "\n" << e.what() << "\n" << error << "\n";
 		}
 	}

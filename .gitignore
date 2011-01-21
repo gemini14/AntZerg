@@ -13,6 +13,8 @@
 *.aps
 *.pch
 *.vspscc
+*.psess
+*.vsp
 *.vssscc
 *.vcxproj.user
 *_i.c

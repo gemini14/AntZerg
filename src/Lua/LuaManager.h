@@ -28,6 +28,7 @@ namespace AntZerg
 
 		void CallFunction(const std::string& functionName);
 		void CallFunction(const std::string& functionName, const int ID, const double dt);
+		void CallFunction(const std::string& functionName, const std::string& type, const float x, const float y);
 		lua_State* const GetLuaState() const;
 		luabind::object GetObject(const std::string& objName);
 		bool LoadScript(const std::string& filename);

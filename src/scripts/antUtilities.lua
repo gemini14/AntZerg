@@ -11,13 +11,16 @@ function AddAnt(type, x, y)
 	end
 end
 
+function QueueAddAnt(type, x, y)
+	factory:QueueCreateAnt(type, x, y)
+end
+
 function RemoveAnt(ID)
 	if ID ~= nil then
 		factory:RemoveAnt(ID)
 		renderer:RemoveAnt(ID)
 		for key, val in pairs(antIDTable) do
 			if val == ID then
-				--print("Removing key "..key.." and ID "..val)
 				table.remove(antIDTable, key)
 				break
 			end

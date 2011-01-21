@@ -6,6 +6,8 @@
 
 namespace AntZerg
 {
+	const int POLY_COUNT = 8;
+
 	Renderer::AntInfo::AntInfo(const AntType type, const float x, const float y, 
 		irr::scene::ISceneNode *node)
 		: type(type), x(x), y(y), node(node)
@@ -126,11 +128,20 @@ namespace AntZerg
 			];
 		luabind::globals(lua->GetLuaState())["renderer"] = this;
 
-		app->smgr->addCameraSceneNode(0, core::vector3df(0,25,0), core::vector3df(0,0,0));
+		app->smgr->addCameraSceneNode(0, core::vector3df(0,30,0), core::vector3df(0,0,0));
 	}
 
 	Renderer::~Renderer()
 	{
+		for(auto iter = antLookupTable.begin(); iter != antLookupTable.end(); ++iter)
+		{
+			delete iter->second;
+		}
+		for(auto iter = plotTable.begin(); iter != plotTable.end(); ++iter)
+		{
+			delete iter->second;
+		}
+		warehouseNode->remove();
 	}
 
 	bool Renderer::IsIDPresent(const int ID)
@@ -180,7 +191,7 @@ namespace AntZerg
 
 			float scale = antDisplayInfoTable[antType]->GetDisplayScale();
 			antLookupTable[ID] = new AntInfo(antType, x, y,  
-				app->smgr->addSphereSceneNode(0.5f, 8, 0, -1, core::vector3df(x, 0, y), core::vector3df(0,0,0),
+				app->smgr->addSphereSceneNode(0.5f, POLY_COUNT, 0, -1, core::vector3df(x, 0, y), core::vector3df(0,0,0),
 				core::vector3df(scale, scale, scale)));
 			antLookupTable[ID]->node->setMaterialTexture(0, antDisplayInfoTable[antType]->GetTexture());
 			antLookupTable[ID]->node->setMaterialFlag(video::EMF_LIGHTING, false);
@@ -195,7 +206,7 @@ namespace AntZerg
 		if(ID != -1 && (plotTable.find(ID) == plotTable.end()))
 		{
 			plotTable[ID] = new FungusPlotInfo(x, y, 
-				app->smgr->addSphereSceneNode(0.5f, 8, 0, -1, core::vector3df(x, 0, y)));
+				app->smgr->addSphereSceneNode(0.5f, POLY_COUNT, 0, -1, core::vector3df(x, 0, y)));
 			plotTable[ID]->node->setMaterialTexture(0, fungusPlotTexture);
 			plotTable[ID]->node->setMaterialFlag(video::EMF_LIGHTING, false);
 		}
@@ -208,7 +219,7 @@ namespace AntZerg
 
 		if(!warehouseNode)
 		{
-			warehouseNode = app->smgr->addSphereSceneNode(0.5f, 8, 0, -1, core::vector3df(x, 0, y));
+			warehouseNode = app->smgr->addSphereSceneNode(0.5f, POLY_COUNT, 0, -1, core::vector3df(x, 0, y));
 			
 			auto table = lua->GetObject("SupportTextures");
 			assert(table.is_valid() && type(table) == LUA_TTABLE);

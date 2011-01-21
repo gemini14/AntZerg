@@ -10,9 +10,9 @@ Eat
 
 local eat_Condition = Condition:new()
 
-function eat_Condition:conditionMet(ant, blackboard)
+function eat_Condition:conditionMet(ant)
 	--queen eats every 5 seconds
-	return ant:GetFood() > 0  and blackboard.delta_sum >= 5
+	return ant:GetFood() > 0  and ant.blackboard.delta_sum >= 5
 end
 
 local eat_c = eat_Condition:new()
@@ -20,14 +20,14 @@ local eat_c = eat_Condition:new()
 
 local eat_Action = Action:new()
 
-function eat_Action:running(ant, blackboard)
+function eat_Action:running(ant)
 	--eating is...fast
 	return false
 end
 
-function eat_Action:run(ant, blackboard)
+function eat_Action:run(ant)
 	ant:Eat()
-	blackboard.delta_sum = 0
+	ant.blackboard.delta_sum = -1
 end
 
 local eat_a = eat_Action:new()
@@ -38,8 +38,8 @@ local eat_a = eat_Action:new()
 
 local createLarva_Condition = Condition:new()
 
-function createLarva_Condition:conditionMet(ant, blackboard)
-	return ant:GetFood() > 0 and blackboard.larva_sum >= 3
+function createLarva_Condition:conditionMet(ant)
+	return ant:GetFood() > 0 and ant.blackboard.larva_sum >= 3
 end
 
 local createLarva_c = createLarva_Condition:new()
@@ -47,18 +47,17 @@ local createLarva_c = createLarva_Condition:new()
 
 local createLarva_Action = Action:new()
 
-function createLarva_Action:running(ant, blackboard)
+function createLarva_Action:running(ant)
 	return false
 end
 
-function createLarva_Action:run(ant, blackboard)
+function createLarva_Action:run(ant)
 	ant:CreateLarva()
-	blackboard.larva_sum = 0
+	ant.blackboard.larva_sum = -1
 end
 
 local createLarva_a = createLarva_Action:new()
 --end Create larva--
-
 
 
 --------
@@ -69,45 +68,36 @@ local Eat = { condition = eat_c, actions = { eat_a } }
 
 local QueenBT = { CreateLarva, Eat }
 
---blackboard table
-local queenBB = {}
 
 function QueenRun(ID, dt)
-	if queenBB.ID == nil then
-		queenBB.ID = { actions = {}, curAction = 0, delta_sum = 0, larva_sum = 0 }
-	end
-
 	local ant = factory:GetAntByID(ID)
 
-	if queenBB.ID.curAction == 0 then
+	if ant.blackboard.curAction == 0 then
 		for key, val in pairs(QueenBT) do
-			local behavior = QueenBT[key]
-			local result = behavior.condition:conditionMet(ant, queenBB.ID)
-			if result then
-				queenBB.ID.actions = behavior.actions
-				queenBB.ID.curAction = 1
+			if QueenBT[key].condition:conditionMet(ant) then
+				ant.blackboard.behavior = key
+				ant.blackboard.curAction = 1
 				break;
 			end
 		end		
 	end
 
-	local curAction = queenBB.ID.curAction
 	--run the current action
-	if curAction ~= 0 and queenBB.ID.actions ~= nil then
-		queenBB.ID.actions[curAction]:run(ant, queenBB.ID, dt)
+	if ant.blackboard.curAction ~= 0 and QueenBT[ant.blackboard.behavior] ~= nil then
+		QueenBT[ant.blackboard.behavior].actions[ant.blackboard.curAction]:run(ant, dt)
 	
 		--see if it's done and update current action and actions tree for ant
-		local status = queenBB.ID.actions[curAction]:running(ant, queenBB.ID)
+		local status = QueenBT[ant.blackboard.behavior].actions[ant.blackboard.curAction]:running(ant)
 		if status == false then
-			if queenBB.ID.actions[curAction + 1] ~= nil then
-				queenBB.ID.curAction = curAction + 1
+			if QueenBT[ant.blackboard.behavior].actions[ant.blackboard.curAction + 1] ~= nil then
+				ant.blackboard.curAction = ant.blackboard.curAction + 1
 			else
-				queenBB.ID.actions = nil
-				queenBB.ID.curAction = 0
+				ant.blackboard.behavior = 0
+				ant.blackboard.curAction = 0
 			end
 		end
 	end
 
-	queenBB.ID.delta_sum = queenBB.ID.delta_sum + dt
-	queenBB.ID.larva_sum = queenBB.ID.larva_sum + dt
+	ant.blackboard.delta_sum = dt
+	ant.blackboard.larva_sum = dt
 end

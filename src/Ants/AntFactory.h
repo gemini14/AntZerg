@@ -3,7 +3,7 @@
 
 
 #include <memory>
-#include <list>
+#include <queue>
 #include <string>
 #include <unordered_map>
 
@@ -20,14 +20,27 @@ namespace AntZerg
 
 	class AntFactory : boost::noncopyable
 	{
+		class AntInfo
+		{
+		public:
+			std::string type;
+			float x;
+			float y;
+			AntInfo(const std::string& type, const float x, const float y);
+			~AntInfo();
+		};
+
 		typedef std::unordered_map<int, Ant*> AntHash;
 		typedef std::unordered_map<int, FungusPlot*> FungusPlotHash;
+		typedef std::queue<AntInfo> AddQueue;
+		typedef std::queue<int> DeleteQueue;
 
 		AntHash antLookupTable;
 		std::shared_ptr<LuaManager> lua;
 		AntWarehouse *warehouse;
 		std::list<int> larvaList;
-		std::list<int> deletionList;
+		DeleteQueue queueDelete;
+		AddQueue queueAdd;
 		FungusPlotHash fungusPlots;
 
 		int antID_counter;
@@ -52,6 +65,7 @@ namespace AntZerg
 		Ant* GetQueen();
 		AntWarehouse* GetWarehouse() const;
 		int LarvaNeedsFood(const int nurseID);
+		void QueueCreateAnt(const std::string& antType, const float x, const float y);
 		void RemoveAnt(const int ID);
 		void RemoveFungusPlot(const int ID);
 		void RunAll(const double dt);

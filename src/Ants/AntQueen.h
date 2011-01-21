@@ -3,6 +3,7 @@
 
 
 #include "Ant.h"
+#include "Blackboards/QueenBlackboard.h"
 
 
 namespace AntZerg
@@ -15,6 +16,8 @@ namespace AntZerg
 		int numLarvaeAvailable;
 
 	public:
+
+		QueenBlackboard blackboard;
 
 		AntQueen(const int ID, std::shared_ptr<LuaManager> lua, const std::string& configFile, 
 			const std::string& actionScriptFile, const float x, const float y);
