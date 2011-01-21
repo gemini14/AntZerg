@@ -18,6 +18,10 @@
 
 namespace AntZerg
 {
+#ifndef _WIN32
+#define nullptr NULL
+#endif
+
 	AntFactory::AntInfo::AntInfo(const std::string& type, const float x, const float y)
 		: type(type), x(x), y(y)
 	{
@@ -32,7 +36,7 @@ namespace AntZerg
 		return antLookupTable.find(ID) != antLookupTable.end();
 	}
 
-	AntFactory::AntFactory(std::shared_ptr<LuaManager> lua) 
+	AntFactory::AntFactory(std::shared_ptr<LuaManager> lua)
 		: antID_counter(0), plotID_counter(0), numAntsAlive(0), numAntsDead(0), maxAntsAlive(0),
 		lua(lua), warehouse(nullptr), queenID(-1)
 	{
@@ -90,7 +94,7 @@ namespace AntZerg
 			{
 				temp = new AntQueen(++antID_counter, lua, "scripts/conf/queenConf.lua", "scripts/actions/queen.lua", x, y);
 				queenID = antID_counter;
-			}			
+			}
 		}
 		else if(antType == "larva")
 		{

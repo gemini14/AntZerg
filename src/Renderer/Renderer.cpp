@@ -6,9 +6,13 @@
 
 namespace AntZerg
 {
+#ifndef _WIN32
+#define nullptr NULL
+#endif
+
 	const int POLY_COUNT = 8;
 
-	Renderer::AntInfo::AntInfo(const AntType type, const float x, const float y, 
+	Renderer::AntInfo::AntInfo(const AntType type, const float x, const float y,
 		irr::scene::ISceneNode *node)
 		: type(type), x(x), y(y), node(node)
 	{
@@ -57,7 +61,7 @@ namespace AntZerg
 			if(antType == "queen")
 			{
 				std::shared_ptr<DisplayInfo> dispInfo((new DisplayInfo(
-					app->driver, 
+					app->driver,
 					object_cast<float>(scaleTable["queen"]),
 					object_cast<std::string>(texTable["queen"]))));
 				pairInfo.second = dispInfo;
@@ -66,7 +70,7 @@ namespace AntZerg
 			else if(antType == "larva")
 			{
 				std::shared_ptr<DisplayInfo> dispInfo((new DisplayInfo(
-					app->driver, 
+					app->driver,
 					object_cast<float>(scaleTable["larva"]),
 					object_cast<std::string>(texTable["larva"]))));
 				pairInfo.second = dispInfo;
@@ -75,7 +79,7 @@ namespace AntZerg
 			else if(antType == "nurse")
 			{
 				std::shared_ptr<DisplayInfo> dispInfo((new DisplayInfo(
-					app->driver, 
+					app->driver,
 					object_cast<float>(scaleTable["nurse"]),
 					object_cast<std::string>(texTable["nurse"]))));
 				pairInfo.second = dispInfo;
@@ -84,7 +88,7 @@ namespace AntZerg
 			else if(antType == "worker")
 			{
 				std::shared_ptr<DisplayInfo> dispInfo((new DisplayInfo(
-					app->driver, 
+					app->driver,
 					object_cast<float>(scaleTable["worker"]),
 					object_cast<std::string>(texTable["worker"]))));
 				pairInfo.second = dispInfo;
@@ -180,7 +184,7 @@ namespace AntZerg
 	void Renderer::AddAnt(const int ID, const std::string& type, const float x, const float y)
 	{
 		using namespace irr;
-		
+
 		if(!IsIDPresent(ID))
 		{
 			auto antType = GetAntTypeFromString(type);
@@ -190,7 +194,7 @@ namespace AntZerg
 			}
 
 			float scale = antDisplayInfoTable[antType]->GetDisplayScale();
-			antLookupTable[ID] = new AntInfo(antType, x, y,  
+			antLookupTable[ID] = new AntInfo(antType, x, y,
 				app->smgr->addSphereSceneNode(0.5f, POLY_COUNT, 0, -1, core::vector3df(x, 0, y), core::vector3df(0,0,0),
 				core::vector3df(scale, scale, scale)));
 			antLookupTable[ID]->node->setMaterialTexture(0, antDisplayInfoTable[antType]->GetTexture());
@@ -205,7 +209,7 @@ namespace AntZerg
 
 		if(ID != -1 && (plotTable.find(ID) == plotTable.end()))
 		{
-			plotTable[ID] = new FungusPlotInfo(x, y, 
+			plotTable[ID] = new FungusPlotInfo(x, y,
 				app->smgr->addSphereSceneNode(0.5f, POLY_COUNT, 0, -1, core::vector3df(x, 0, y)));
 			plotTable[ID]->node->setMaterialTexture(0, fungusPlotTexture);
 			plotTable[ID]->node->setMaterialFlag(video::EMF_LIGHTING, false);
@@ -220,12 +224,12 @@ namespace AntZerg
 		if(!warehouseNode)
 		{
 			warehouseNode = app->smgr->addSphereSceneNode(0.5f, POLY_COUNT, 0, -1, core::vector3df(x, 0, y));
-			
+
 			auto table = lua->GetObject("SupportTextures");
 			assert(table.is_valid() && type(table) == LUA_TTABLE);
 			std::string texFile = object_cast<std::string>(table["warehouse"]);
 			auto tex = app->driver->getTexture(texFile.c_str());
-			
+
 			warehouseNode->setMaterialTexture(0, tex);
 			warehouseNode->setMaterialFlag(video::EMF_LIGHTING, false);
 		}

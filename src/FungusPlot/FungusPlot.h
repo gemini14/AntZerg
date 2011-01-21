@@ -20,11 +20,11 @@ namespace AntZerg
 		FungusPlot(const float x, const float y);
 		~FungusPlot();
 
-		inline int GetFood() const;
-		inline float GetX() const;
-		inline float GetY() const;
+		int GetFood() const;
+		float GetX() const;
+		float GetY() const;
 		static luabind::scope RegisterLua();
-		inline int WithdrawFood(const int amount);
+		int WithdrawFood(const int amount);
 	};
 }
 
